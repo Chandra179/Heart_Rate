@@ -6,7 +6,6 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
@@ -54,7 +53,9 @@ class _HomeState extends State<Home> {
               iconSize: 150,
               color: Colors.pink,
               splashRadius: 1,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/flash');
+              },
             ),
           ),
           Center(child: Text('Click Me')),
