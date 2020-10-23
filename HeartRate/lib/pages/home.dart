@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:heart_rate/component/barChart.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
+
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    var now = new DateTime.now();
+    String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Heart Rate'),
@@ -57,35 +61,46 @@ class _HomeState extends State<Home> {
           Container(
             alignment: Alignment.topLeft,
             padding: EdgeInsets.fromLTRB(100, 70, 70, 10),
-            child: Text('Recently'),
+            child: Text('Last Measurement'),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(95, 0, 70, 10),
+            padding: EdgeInsets.fromLTRB(95, 0, 95, 10),
             child: Card(
-              child: Column(
-                children: <Widget>[
-                  const ListTile(
-                    leading: Icon(Icons.access_alarms),
-                    title: Text('Exercise'),
-                    subtitle: Text('Cycling through deep jungle in midnight'),
-                  )
-                ],
-              )
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.accessibility_sharp),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Exercise'),
+                          Container(
+                              child: Text('98')
+                          ),
+                        ],
+                      ),
+                      subtitle: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            formattedDate,
+                            style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                          ),
+                          Icon(
+                            Icons.favorite,
+                            size: 18,
+                            color: Colors.pink,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                )
             ),
-          ),
-          Container(
-            alignment: Alignment.topLeft,
-            padding: EdgeInsets.fromLTRB(100, 40, 70, 10),
-            child: Text('Heart Monitor'),
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(95, 10, 70, 10),
-            child: BarChartSample3(),
-          )
+           ),
 
         ],),
       ),
-
     );
   }
 }
