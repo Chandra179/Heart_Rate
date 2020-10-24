@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
               color: Colors.pink,
               splashRadius: 1,
               onPressed: () {
-                Navigator.pushNamed(context, '/flash');
+                Navigator.pushNamed(context, '/heart');
               },
             ),
           ),
