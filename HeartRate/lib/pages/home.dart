@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heart_rate/pages/heartSensor.dart';
 import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
@@ -9,6 +10,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+
     var now = new DateTime.now();
     String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
 
@@ -41,8 +43,7 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      body: Container(
-        child: ListView(children: <Widget>[
+      body: ListView(children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
             alignment: Alignment.center,
@@ -54,7 +55,8 @@ class _HomeState extends State<Home> {
               color: Colors.pink,
               splashRadius: 1,
               onPressed: () {
-                Navigator.pushNamed(context, '/heart');
+                // Navigator.pushNamed(context, '/heart');
+                _awaitReturnValueFromSecondScreen(context);
               },
             ),
           ),
@@ -75,9 +77,7 @@ class _HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Exercise'),
-                          Container(
-                              child: Text('98')
-                          ),
+                          Text('98'),
                         ],
                       ),
                       subtitle: Row(
@@ -99,9 +99,21 @@ class _HomeState extends State<Home> {
                 )
             ),
            ),
-
         ],),
-      ),
     );
   }
+}
+
+void _awaitReturnValueFromSecondScreen(BuildContext context) async {
+
+  // start the SecondScreen and wait for it to finish with a result
+  final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(),
+      )) ;
+
+  Scaffold.of(context)
+    ..removeCurrentSnackBar()
+    ..showSnackBar(SnackBar(content: Text("$result")));
 }

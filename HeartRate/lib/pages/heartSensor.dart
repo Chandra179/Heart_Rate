@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-import 'chart.dart';
+import '../component/chart.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,8 +30,7 @@ class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    _animationController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     _animationController
       ..addListener(() {
         setState(() {
@@ -63,6 +62,7 @@ class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    // CAMERA PREVIEW, TOP LEFT
                     Expanded(
                       flex: 1,
                       child: Padding(
@@ -159,6 +159,15 @@ class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
                 child: Chart(_data),
               ),
             ),
+            RaisedButton(
+              child: Text(
+                'Send text back',
+                style: TextStyle(fontSize: 24),
+              ),
+              onPressed: () {
+                _sendDataBack(context);
+              },
+            )
           ],
         ),
       ),
@@ -205,6 +214,7 @@ class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
     _controller = null;
   }
 
+  //CAMERA CONTROLLER
   Future<void> _initController() async {
     try {
       List _cameras = await availableCameras();
@@ -221,6 +231,7 @@ class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
     }
   }
 
+  //HEART SCANNING TIMER
   void _initTimer() {
     _timer = Timer.periodic(Duration(milliseconds: 1000 ~/ _fs), (timer) {
       if (_toggled) {
@@ -231,6 +242,8 @@ class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
     });
   }
 
+  // calculates the average of the camera image’s red channel
+  // and adds the value to the data list
   void _scanImage(CameraImage image) {
     _now = DateTime.now();
     _avg =
@@ -295,5 +308,10 @@ class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
           milliseconds:
           1000 * _windowLen ~/ _fs)); // wait for a new set of _data values
     }
+    }
+
+  void _sendDataBack(BuildContext context) {
+    List datas = [_avg, _bpm];
+    Navigator.pop(context, datas);
   }
 }
