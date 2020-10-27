@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import '../component/chart.dart';
 
-class HomePage extends StatefulWidget {
+class HeartSensor extends StatefulWidget {
   @override
-  HomePageView createState() {
-    return HomePageView();
-  }
+  _HeartSensorState createState() => _HeartSensorState();
 }
 
-class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStateMixin{
   bool _toggled = false; // toggle button value
   List<SensorValue> _data = List<SensorValue>(); // array to store the values
   CameraController _controller;
@@ -165,7 +163,7 @@ class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
                 style: TextStyle(fontSize: 24),
               ),
               onPressed: () {
-                _sendDataBack(context);
+                Navigator.pop(context, _avg);
               },
             )
           ],
@@ -308,10 +306,6 @@ class HomePageView extends State<HomePage> with SingleTickerProviderStateMixin {
           milliseconds:
           1000 * _windowLen ~/ _fs)); // wait for a new set of _data values
     }
-    }
-
-  void _sendDataBack(BuildContext context) {
-    List datas = [_avg, _bpm];
-    Navigator.pop(context, datas);
   }
 }
+

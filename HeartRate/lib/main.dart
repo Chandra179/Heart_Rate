@@ -10,6 +10,6 @@ void main() => runApp(MaterialApp(
       '/home': (context) => Home(),
       '/profile': (context) => Profile(),
       '/settings': (context) => Settings(),
-      '/heart': (context) => HomePage(),
+      '/heart': (context) => HeartSensor(),
     }
 ));

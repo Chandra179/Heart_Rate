@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:heart_rate/pages/heartSensor.dart';
 import 'package:intl/intl.dart';
 
+void main()=>runApp(Home());
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -47,18 +49,7 @@ class _HomeState extends State<Home> {
           Container(
             padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
             alignment: Alignment.center,
-            child: IconButton(
-              icon: Icon(
-                Icons.favorite,
-              ),
-              iconSize: 150,
-              color: Colors.pink,
-              splashRadius: 1,
-              onPressed: () {
-                // Navigator.pushNamed(context, '/heart');
-                _awaitReturnValueFromSecondScreen(context);
-              },
-            ),
+            child: GoToHeartSensor(),
           ),
           Center(child: Text('Click Me')),
           Container(
@@ -104,16 +95,36 @@ class _HomeState extends State<Home> {
   }
 }
 
-void _awaitReturnValueFromSecondScreen(BuildContext context) async {
+class GoToHeartSensor extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.favorite,
+      ),
+      iconSize: 150,
+      color: Colors.pink,
+      splashRadius: 1,
+      onPressed: () {
+        // Navigator.pushNamed(context, '/heart');
+        _awaitReturnValueFromSecondScreen(context);
+      },
+    );
+  }
 
-  // start the SecondScreen and wait for it to finish with a result
-  final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(),
-      )) ;
+  _awaitReturnValueFromSecondScreen(BuildContext context) async {
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HeartSensor(),
+        ));
 
-  Scaffold.of(context)
-    ..removeCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text("$result")));
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text("$result")));
+  }
 }
+
+
+
