@@ -163,7 +163,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
                 style: TextStyle(fontSize: 24),
               ),
               onPressed: () {
-                Navigator.pop(context, _avg);
+                Navigator.pop(context, _bpm);
               },
             )
           ],
