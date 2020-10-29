@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import '../component/chart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HeartSensor extends StatefulWidget {
   @override
