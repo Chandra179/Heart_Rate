@@ -1,9 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:heart_rate/pages/heartSensor.dart';
 import 'package:intl/intl.dart';
+
+//FIREBASE
+import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main()=>runApp(Home());
+
+class GoToHeartSensor extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.favorite,
+      ),
+      iconSize: 150,
+      color: Colors.pink,
+      splashRadius: 1,
+      onPressed: () {
+        // Navigator.pushNamed(context, '/heart');
+        _awaitReturnValueFromSecondScreen(context);
+      },
+    );
+  }
+
+  _awaitReturnValueFromSecondScreen(BuildContext context) async {
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HeartSensor(),
+        ));
+
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text("$result")));
+  }
+}
+
+Widget _buildListItem(BuildContext context, DocumentSnapshot document){
+  return ListTile(
+    title: Row(
+      children: [
+        Expanded(
+            child: Text(
+              document['Nama'],
+            )
+        )
+      ],
+    )
+  );
+}
 
 class Home extends StatefulWidget {
   @override
@@ -17,6 +65,9 @@ class _HomeState extends State<Home> {
     var now = new DateTime.now();
     String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
 
+    ///
+    ///USER INTERFACE ------------------------------------------------------
+    ///
     return Scaffold(
       appBar: AppBar(
         title: Text('Heart Rate'),
@@ -69,7 +120,7 @@ class _HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Exercise'),
-                          Text('98'),
+                          // Text('98'),
                         ],
                       ),
                       subtitle: Row(
@@ -87,6 +138,17 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                     ),
+                    StreamBuilder(
+                      stream: FirebaseFirestore.instance.collection('User').snapshots(),
+                      builder: (context, snapshot) {
+                        if(!snapshot.hasData) return const Text('Loading...');
+                        return ListView.builder(
+                          itemExtent: 80.0,
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (context, index) => _buildListItem(context, snapshot.data.doc),
+                        );
+                      },
+                    ),
                   ],
                 )
             ),
@@ -95,37 +157,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-class GoToHeartSensor extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.favorite,
-      ),
-      iconSize: 150,
-      color: Colors.pink,
-      splashRadius: 1,
-      onPressed: () {
-        // Navigator.pushNamed(context, '/heart');
-        _awaitReturnValueFromSecondScreen(context);
-      },
-    );
-  }
-
-  _awaitReturnValueFromSecondScreen(BuildContext context) async {
-    // start the SecondScreen and wait for it to finish with a result
-    final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HeartSensor(),
-        ));
-
-    Scaffold.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text("$result")));
-  }
-}
-
-
 

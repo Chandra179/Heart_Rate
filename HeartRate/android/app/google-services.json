@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "300943182066",
-    "firebase_url": "https://tematik-94972.firebaseio.com",
-    "project_id": "tematik-94972",
-    "storage_bucket": "tematik-94972.appspot.com"
+    "project_number": "693069274674",
+    "firebase_url": "https://heartrate-87ff6.firebaseio.com",
+    "project_id": "heartrate-87ff6",
+    "storage_bucket": "heartrate-87ff6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:300943182066:android:768305af198679c0f3a86b",
+        "mobilesdk_app_id": "1:693069274674:android:0d3c1b84b2d632808c662b",
         "android_client_info": {
           "package_name": "com.umn.ac.id.heart_rate"
         }
       },
       "oauth_client": [
         {
-          "client_id": "300943182066-p8d8bpgul2uus1ojesvfjdjov8oval1d.apps.googleusercontent.com",
+          "client_id": "693069274674-n7q47stcadas2g82rubho7th3m3lea49.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAnq-TepqARg7MgrowAZE6Hb3fBxEpQkT8"
+          "current_key": "AIzaSyCVsqDkiFNNnJC4SURSsPB6SU7zfGu2k_w"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "300943182066-p8d8bpgul2uus1ojesvfjdjov8oval1d.apps.googleusercontent.com",
+              "client_id": "693069274674-n7q47stcadas2g82rubho7th3m3lea49.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
