@@ -39,18 +39,66 @@ class GoToHeartSensor extends StatelessWidget {
   }
 }
 
-Widget _buildListItem(BuildContext context, DocumentSnapshot document){
-  return ListTile(
-    title: Row(
-      children: [
-        Expanded(
-            child: Text(
-              document['Nama'],
-            )
-        )
-      ],
-    )
-  );
+class UserInformation extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection('dbuser');
+    var now = new DateTime.now();
+    String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: users.snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+
+        return new ListView(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: snapshot.data.docs.map((DocumentSnapshot document) {
+            return new Container(
+              padding: EdgeInsets.fromLTRB(95, 0, 95, 10),
+              child: Card(
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        leading: Icon(Icons.accessibility_sharp),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            new Text(document.data()['nama']),
+                            Text('98'),
+                          ],
+                        ),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              formattedDate,
+                              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                            ),
+                            Icon(
+                              Icons.favorite,
+                              size: 18,
+                              color: Colors.pink,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
 }
 
 class Home extends StatefulWidget {
@@ -109,51 +157,8 @@ class _HomeState extends State<Home> {
             padding: EdgeInsets.fromLTRB(100, 70, 70, 10),
             child: Text('Last Measurement'),
           ),
-          Container(
-            padding: EdgeInsets.fromLTRB(95, 0, 95, 10),
-            child: Card(
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.accessibility_sharp),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Exercise'),
-                          // Text('98'),
-                        ],
-                      ),
-                      subtitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            formattedDate,
-                            style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                          ),
-                          Icon(
-                            Icons.favorite,
-                            size: 18,
-                            color: Colors.pink,
-                          )
-                        ],
-                      ),
-                    ),
-                    StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection('User').snapshots(),
-                      builder: (context, snapshot) {
-                        if(!snapshot.hasData) return const Text('Loading...');
-                        return ListView.builder(
-                          itemExtent: 80.0,
-                          itemCount: snapshot.data.documents.length,
-                          itemBuilder: (context, index) => _buildListItem(context, snapshot.data.doc),
-                        );
-                      },
-                    ),
-                  ],
-                )
-            ),
-           ),
-        ],),
+        UserInformation(),
+        ]),
     );
   }
 }
