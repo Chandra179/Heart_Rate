@@ -42,6 +42,7 @@ class GoToHeartSensor extends StatelessWidget {
 class UserInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     CollectionReference users = FirebaseFirestore.instance.collection('dbuser');
     var now = new DateTime.now();
     String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
@@ -108,14 +109,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
+  void initState() {
+    super.initState();
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-    var now = new DateTime.now();
-    String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
-
-    ///
-    ///USER INTERFACE ------------------------------------------------------
-    ///
     return Scaffold(
       appBar: AppBar(
         title: Text('Heart Rate'),
@@ -157,7 +160,7 @@ class _HomeState extends State<Home> {
             padding: EdgeInsets.fromLTRB(100, 70, 70, 10),
             child: Text('Last Measurement'),
           ),
-        UserInformation(),
+          Container(child: UserInformation()),
         ]),
     );
   }

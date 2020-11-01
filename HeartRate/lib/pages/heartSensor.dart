@@ -5,6 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import '../component/chart.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+///----------------------------------------------------------------------------------------------------------------------------------------------------------
+
 class HeartSensor extends StatefulWidget {
   @override
   _HeartSensorState createState() => _HeartSensorState();
@@ -24,6 +29,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
   double _avg; // store the average value during calculation
   DateTime _now; // store the now Datetime
   Timer _timer; // timer for image processing
+
 
   @override
   void initState() {
@@ -50,6 +56,85 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Heart Rate'),
+      ),
+      backgroundColor: Colors.white,
+      body: ListView(children: <Widget>[
+        _controller != null && _toggled
+            ? AspectRatio(
+          aspectRatio:
+          _controller.value.aspectRatio,
+          child: CameraPreview(_controller),
+        ): Container(),
+
+        ///SHOW BPM NUMBER
+        Container(
+          padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
+          child: Container(
+            child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Estimated BPM",
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                    Text(
+                      (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "--"),
+                      style: TextStyle(
+                          fontSize: 32, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                )),
+          ),
+        ),
+
+        ///START THE HEART RATE SCANNING
+        Container(
+          child: Center(
+            child: Transform.scale(
+              scale: _iconScale,
+              child: IconButton(
+                icon:
+                Icon(_toggled ? Icons.favorite : Icons.favorite_border),
+                color: Colors.red,
+                iconSize: 128,
+                onPressed: () {
+                  if (_toggled) {
+                    _untoggle();
+                  } else {
+                    _toggle();
+                  }
+                },
+              ),
+            ),
+          ),
+        ),
+
+        ///SHOWING LINE CHART OF SCANNING PROCESS
+        Container(
+          child: SizedBox(
+            height: 100,
+            width: 150,
+            child: Container(
+              margin: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(18),
+                  ),
+                  color: Colors.black),
+              child: Chart(_data),
+            ),
+          ),
+        ),
+      ],
+      )
+    );
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -308,4 +393,3 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
     }
   }
 }
-
