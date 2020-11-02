@@ -62,7 +62,6 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
       ),
       backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
-
         ///SHOW BPM NUMBER
         Container(
           padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
@@ -119,7 +118,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
                   borderRadius: BorderRadius.all(
                     Radius.circular(18),
                   ),
-                  color: Colors.black),
+                  color: Colors.white),
               child: Chart(_data),
             ),
           ),
