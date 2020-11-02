@@ -57,11 +57,9 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Heart Rate'),
-      ),
       backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
+
         ///SHOW BPM NUMBER
         Container(
           padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
@@ -85,12 +83,13 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
           ),
         ),
 
-        ///START THE HEART RATE SCANNING
+        ///START THE HEART RATE SCANNING --> PRESS THE HEART BUTTON
         Container(
           child: Center(
             child: Transform.scale(
               scale: _iconScale,
               child: IconButton(
+                splashRadius: 1,
                 icon:
                 Icon(_toggled ? Icons.favorite : Icons.favorite_border),
                 color: Colors.red,
@@ -168,7 +167,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
     _controller = null;
   }
 
-  //CAMERA CONTROLLER
+  ///CAMERA CONTROLLER
   Future<void> _initController() async {
     try {
       List _cameras = await availableCameras();
@@ -185,7 +184,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
     }
   }
 
-  //HEART SCANNING TIMER
+  ///HEART SCANNING TIMER
   void _initTimer() {
     _timer = Timer.periodic(Duration(milliseconds: 1000 ~/ _fs), (timer) {
       if (_toggled) {
@@ -196,8 +195,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
     });
   }
 
-  // calculates the average of the camera image’s red channel
-  // and adds the value to the data list
+  /// calculates the average of the camera image’s red channel, and adds the value to the data list
   void _scanImage(CameraImage image) {
     _now = DateTime.now();
     _avg =
@@ -211,6 +209,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
     });
   }
 
+  ///CALCULATE BPM
   void _updateBPM() async {
     // Bear in mind that the method used to calculate the BPM is very rudimentar
     // feel free to improve it :)

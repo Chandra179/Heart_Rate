@@ -55,7 +55,7 @@ class UserInformation extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
+          return Center(child: Text("Loading"));
         }
 
         return new ListView(
@@ -120,41 +120,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Heart Rate'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text('Drawer Header'),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            ListTile(
-              title: Text('Profile'),
-              onTap: () {
-                Navigator.pushNamed(context, '/profile');
-              },
-            ),
-            ListTile(
-              title: Text('Settings'),
-              onTap: () {
-                Navigator.pushNamed(context, '/settings');
-              },
-            ),
-          ],
-        ),
-      ),
       body: ListView(children: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
-            alignment: Alignment.center,
-            child: GoToHeartSensor(),
-          ),
-          Center(child: Text('Click Me')),
           Container(
             alignment: Alignment.topLeft,
             padding: EdgeInsets.fromLTRB(100, 70, 70, 10),
