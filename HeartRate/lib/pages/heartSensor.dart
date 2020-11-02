@@ -62,12 +62,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
       ),
       backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
-        _controller != null && _toggled
-            ? AspectRatio(
-          aspectRatio:
-          _controller.value.aspectRatio,
-          child: CameraPreview(_controller),
-        ): Container(),
+        
 
         ///SHOW BPM NUMBER
         Container(
@@ -125,7 +120,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
                   borderRadius: BorderRadius.all(
                     Radius.circular(18),
                   ),
-                  color: Colors.black),
+                  color: Colors.white),
               child: Chart(_data),
             ),
           ),
