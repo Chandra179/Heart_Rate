@@ -21,9 +21,11 @@ dependencies:
   wakelock: ^0.1.4+1
   cupertino_icons: ^0.1.2
   camera: ^0.5.8+11
+  fluttertoast: ^7.1.1
 
   firebase_core: "0.5.0+1"
   cloud_firestore: "^0.14.1+3"
+  firebase_auth:
 
 dev_dependencies:
   flutter_test:
@@ -32,4 +34,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - images/zoro.jpg
+    - assets/images/zoro.jpg
+    - assets/images/splash.png

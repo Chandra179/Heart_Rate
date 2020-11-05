@@ -1,10 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:heart_rate/pages/home.dart';
-import 'package:heart_rate/pages/profile.dart';
-import 'package:heart_rate/pages/settings.dart';
-import 'package:heart_rate/pages/heartSensor.dart';
+import 'package:heart_rate/pages/login.dart';
+import 'dart:async';
 
-void main()=>runApp(App());
+// void main()=>runApp(App());
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(App());
+}
 
 class App extends StatelessWidget {
   @override
@@ -17,53 +22,29 @@ class App extends StatelessWidget {
 
 class Main extends StatefulWidget {
   @override
-  _MainState createState() => _MainState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _MainState extends State<Main> {
-
-  int _currentIndex = 0;
-  final tabs = [
-    Home(),
-    HeartSensor(),
-    Profile(),
-  ];
+class _SplashScreenState extends State<Main> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+        Duration(seconds: 3),
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => Login())));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Heart Measurement'),
-      ),
-      body: tabs[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        iconSize: 25,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: 'Scan',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-            backgroundColor: Colors.blue,
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Image.asset('assets/images/splash.png'),
       ),
     );
   }
 }
+
+
 
