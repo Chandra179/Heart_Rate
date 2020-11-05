@@ -94,7 +94,7 @@ class _Login extends State<Login> {
               onPressed: () async {
                 await Auth.signIn(emailController.text, passwordController.text).then((user) {
                   if(user != null){
-                    Navigator.push(
+                    Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => Menu()));
                   }else {

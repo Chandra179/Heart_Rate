@@ -122,6 +122,9 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
             ),
           ),
         ),
+        Container(
+          child: AddUser('Chandraaaaaaaa'),
+        )
       ],
       )
     );
@@ -263,3 +266,33 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
     }
   }
 }
+
+class AddUser extends StatelessWidget {
+  final String nama;
+
+  AddUser(this.nama);
+
+  @override
+  Widget build(BuildContext context) {
+    // Create a CollectionReference called users that references the firestore collection
+    CollectionReference users = FirebaseFirestore.instance.collection('dbuser');
+
+    Future<void> addUser() {
+      // Call the user's CollectionReference to add a new user
+      return users
+          .add({
+        'nama': nama,
+      })
+          .then((value) => print("User Added"))
+          .catchError((error) => print("Failed to add user: $error"));
+    }
+
+    return FlatButton(
+      onPressed: addUser,
+      child: Text(
+        "Add User",
+      ),
+    );
+  }
+}
+

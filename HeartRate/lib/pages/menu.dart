@@ -22,7 +22,7 @@ class _MainState extends State<Menu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Heart Measurementdsdsdsdd'),
+        title: Text('Heart Measurement'),
       ),
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
