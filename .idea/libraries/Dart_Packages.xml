@@ -152,7 +152,7 @@
         <entry key="firebase_core_web">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.2.0/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.2.1/lib" />
             </list>
           </value>
         </entry>
@@ -285,7 +285,7 @@
         <entry key="quiver">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-2.1.4+1/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-2.1.5/lib" />
             </list>
           </value>
         </entry>
@@ -383,7 +383,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-0.3.1+1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.5.0+1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-2.0.0/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.2.0/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.2.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.12.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_android-0.8.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.1/lib" />
@@ -399,7 +399,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_parsing-0.1.4/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/pedantic-1.9.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-1.0.3/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-2.1.4+1/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-2.1.5/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.0-nullsafety.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0-nullsafety.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0-nullsafety.1/lib" />

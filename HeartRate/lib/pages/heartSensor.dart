@@ -4,9 +4,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import '../component/chart.dart';
-
-import 'package:firebase_core/firebase_core.dart';
+import 'package:heart_rate/pages/userData.dart';
+import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 ///----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -16,6 +17,10 @@ class HeartSensor extends StatefulWidget {
 }
 
 class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStateMixin{
+
+  final db = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   bool _toggled = false; // toggle button value
   List<SensorValue> _data = List<SensorValue>(); // array to store the values
   CameraController _controller;
@@ -30,6 +35,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
   DateTime _now; // store the now Datetime
   Timer _timer; // timer for image processing
 
+  String tanggal = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
 
   @override
   void initState() {
@@ -56,6 +62,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
@@ -122,8 +129,16 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
             ),
           ),
         ),
-        Container(
-          child: AddUser('Chandraaaaaaaa'),
+        RaisedButton(
+          child: Text('test'),
+          onPressed: () async {
+            final User user = FirebaseAuth.instance.currentUser;
+            final uid = user.uid;
+            await db.collection("dbuser")
+                .doc(uid)
+                .collection("heart_rate")
+                .add(Heart(tanggal, _bpm.toString()).toJson());
+            },
         )
       ],
       )
@@ -267,32 +282,4 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
   }
 }
 
-class AddUser extends StatelessWidget {
-  final String nama;
-
-  AddUser(this.nama);
-
-  @override
-  Widget build(BuildContext context) {
-    // Create a CollectionReference called users that references the firestore collection
-    CollectionReference users = FirebaseFirestore.instance.collection('dbuser');
-
-    Future<void> addUser() {
-      // Call the user's CollectionReference to add a new user
-      return users
-          .add({
-        'nama': nama,
-      })
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
-    }
-
-    return FlatButton(
-      onPressed: addUser,
-      child: Text(
-        "Add User",
-      ),
-    );
-  }
-}
 

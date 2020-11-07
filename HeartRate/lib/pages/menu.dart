@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:heart_rate/pages/heartSensor.dart';
 import 'package:heart_rate/pages/home.dart';
