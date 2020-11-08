@@ -28,9 +28,13 @@ class _HomeState extends State<Home> {
         child: Column(
             children: <Widget>[
               Container(
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.fromLTRB(100, 70, 70, 10),
-                child: Text('Last Measurement'),
+                alignment: Alignment.topCenter,
+                padding: EdgeInsets.fromLTRB(0, 40, 0, 30),
+                child: Text(
+                    'History',
+                     style: TextStyle(
+                       fontSize: 30.0,
+                     )),
               ),
               StreamBuilder(
                   stream: getUsersInformationStreamSnapshots(context),
@@ -64,8 +68,8 @@ Stream<QuerySnapshot> getUsersInformationStreamSnapshots(BuildContext context) a
 
 Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
   return new Container(
-        padding: EdgeInsets.fromLTRB(95, 0, 95, 10),
           child: Card(
+            elevation: 2,
             child: Column(
               children: <Widget>[
                 ListTile(
