@@ -65,9 +65,6 @@ Stream<QuerySnapshot> getUsersInformationStreamSnapshots(BuildContext context) a
 Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
   return new Container(
         padding: EdgeInsets.fromLTRB(95, 0, 95, 10),
-        child: SizedBox(
-          width: 100.0,
-          height: 80.0,
           child: Card(
             child: Column(
               children: <Widget>[
@@ -98,6 +95,5 @@ Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
               ],
             ),
           ),
-        ),
   );
 }
