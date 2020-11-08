@@ -24,7 +24,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(children: <Widget>[
+      body: ListView(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: <Widget>[
           Container(
             alignment: Alignment.topLeft,
             padding: EdgeInsets.fromLTRB(100, 70, 70, 10),
