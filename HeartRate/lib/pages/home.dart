@@ -25,8 +25,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
           children: <Widget>[
           Container(
             alignment: Alignment.topLeft,
@@ -62,11 +60,7 @@ Stream<QuerySnapshot> getUsersInformationStreamSnapshots(BuildContext context) a
 }
 
 Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
-  return new ListView(
-    scrollDirection: Axis.vertical,
-    shrinkWrap: true,
-    children: <Widget>[
-      Container(
+  return new Container(
         padding: EdgeInsets.fromLTRB(95, 0, 95, 10),
         child: Card(
           child: Column(
@@ -98,7 +92,5 @@ Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
             ],
           ),
         ),
-      )
-    ],
   );
 }
