@@ -68,36 +68,34 @@ Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
         child: SizedBox(
           width: 100.0,
           height: 80.0,
-          child: Flexible(
-            child: Card(
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.accessibility_sharp),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        new Text("Exercise"),
-                        new Text(heartdata['bpm'].toString()),
-                      ], ///RETRIEVE DATA
-                    ),
-                    subtitle: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          heartdata['tanggal'].toString(), ///RETRIEVE DATA
-                          style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                        ),
-                        Icon(
-                          Icons.favorite,
-                          size: 18,
-                          color: Colors.pink,
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
+          child: Card(
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.accessibility_sharp),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      new Text("Exercise"),
+                      new Text(heartdata['bpm'].toString()),
+                    ], ///RETRIEVE DATA
+                  ),
+                  subtitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        heartdata['tanggal'].toString(), ///RETRIEVE DATA
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
+                      Icon(
+                        Icons.favorite,
+                        size: 18,
+                        color: Colors.pink,
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         ),
