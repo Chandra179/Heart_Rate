@@ -62,11 +62,9 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
-
         ///SHOW BPM NUMBER
         Container(
           padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
@@ -229,12 +227,6 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
 
   ///CALCULATE BPM
   void _updateBPM() async {
-    // Bear in mind that the method used to calculate the BPM is very rudimentar
-    // feel free to improve it :)
-
-    // Since this function doesn't need to be so "exact" regarding the time it executes,
-    // I only used the a Future.delay to repeat it from time to time.
-    // Ofc you can also use a Timer object to time the callback of this function
     List<SensorValue> _values;
     double _avg;
     int _n;
