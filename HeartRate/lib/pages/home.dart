@@ -68,17 +68,13 @@ Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
             children: [
               new Text("Exercise"),
               new Text(heartdata['bpm'].toString()),
-            ],
-
-            ///RETRIEVE DATA
+            ], ///RETRIEVE DATA
           ),
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                heartdata['tanggal'].toString(),
-
-                ///RETRIEVE DATA
+                heartdata['tanggal'].toString(), ///RETRIEVE DATA
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
               Icon(

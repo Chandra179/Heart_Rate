@@ -37,6 +37,7 @@ class _HeartSensorState extends State<HeartSensor>
   bool _Saveme = false; //Save data to dbase
 
   String tanggal = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
+  var _myColor = false;
 
   @override
   void initState() {
@@ -71,7 +72,6 @@ class _HeartSensorState extends State<HeartSensor>
         backgroundColor: Colors.white,
         body: ListView(
           children: <Widget>[
-
             ///SHOW BPM NUMBER
             Container(
               padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
@@ -134,21 +134,80 @@ class _HeartSensorState extends State<HeartSensor>
                 ),
               ),
             ),
+
+            ///SAVE TO DATABASE
             Visibility(
-              visible: _Saveme,
-              child: RaisedButton(
-                child: Text('Save'),
-                onPressed: () async {
-                  final User user = FirebaseAuth.instance.currentUser;
-                  final uid = user.uid;
-                  await db
-                      .collection("dbuser")
-                      .doc(uid)
-                      .collection("heart_rate")
-                      .add(Heart(tanggal, _bpm.toString()).toJson());
-                },
-              ),
-            )
+                visible: _Saveme,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          IconButton(
+                              splashColor: Colors.yellow,
+                              splashRadius: 20,
+                              icon: Icon(
+                                Icons.accessibility_sharp,
+                                color: (_myColor ? Colors.black : Colors.grey),
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                if (_myColor) {
+                                  setState(() {
+                                    _myColor = false;
+                                  });
+                                } else {
+                                  setState(() {
+                                    _myColor = true;
+                                  });
+                                }
+                              }),
+                          IconButton(
+                              splashColor: Colors.yellow,
+                              splashRadius: 20,
+                              icon: Icon(
+                                Icons.accessibility_sharp,
+                                color: (_myColor ? Colors.black : Colors.grey),
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                if (_myColor) {
+                                  setState(() {
+                                    _myColor = false;
+                                  });
+                                } else {
+                                  setState(() {
+                                    _myColor = true;
+                                  });
+                                }
+                              }),
+                          Icon(
+                            Icons.airline_seat_individual_suite_rounded,
+                            size: 30,
+                          ),
+                          Icon(
+                            Icons.directions_run,
+                            size: 30,
+                          ),
+                        ],
+                      ),
+                    ),
+                    RaisedButton(
+                      child: Text('Save'),
+                      onPressed: () async {
+                        final User user = FirebaseAuth.instance.currentUser;
+                        final uid = user.uid;
+                        await db
+                            .collection("dbuser")
+                            .doc(uid)
+                            .collection("heart_rate")
+                            .add(Heart(tanggal, _bpm.toString()).toJson());
+                      },
+                    ),
+                  ],
+                ))
           ],
         ));
   }

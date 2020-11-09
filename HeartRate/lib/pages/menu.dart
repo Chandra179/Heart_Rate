@@ -38,7 +38,7 @@ class _MainState extends State<Menu> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'Account',
             backgroundColor: Colors.blue,
           ),
         ],
