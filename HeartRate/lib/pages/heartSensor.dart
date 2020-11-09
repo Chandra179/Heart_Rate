@@ -34,6 +34,7 @@ class _HeartSensorState extends State<HeartSensor>
   double _avg; // store the average value during calculation
   DateTime _now; // store the now Datetime
   Timer _timer; // timer for image processing
+  bool _Saveme = false; //Save data to dbase
 
   String tanggal = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
 
@@ -70,6 +71,7 @@ class _HeartSensorState extends State<HeartSensor>
         backgroundColor: Colors.white,
         body: ListView(
           children: <Widget>[
+
             ///SHOW BPM NUMBER
             Container(
               padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
@@ -132,17 +134,20 @@ class _HeartSensorState extends State<HeartSensor>
                 ),
               ),
             ),
-            RaisedButton(
-              child: Text('Save'),
-              onPressed: () async {
-                final User user = FirebaseAuth.instance.currentUser;
-                final uid = user.uid;
-                await db
-                    .collection("dbuser")
-                    .doc(uid)
-                    .collection("heart_rate")
-                    .add(Heart(tanggal, _bpm.toString()).toJson());
-              },
+            Visibility(
+              visible: _Saveme,
+              child: RaisedButton(
+                child: Text('Save'),
+                onPressed: () async {
+                  final User user = FirebaseAuth.instance.currentUser;
+                  final uid = user.uid;
+                  await db
+                      .collection("dbuser")
+                      .doc(uid)
+                      .collection("heart_rate")
+                      .add(Heart(tanggal, _bpm.toString()).toJson());
+                },
+              ),
             )
           ],
         ));
@@ -166,6 +171,7 @@ class _HeartSensorState extends State<HeartSensor>
       _animationController?.repeat(reverse: true);
       setState(() {
         _toggled = true;
+        _Saveme = false;
       });
       // after is toggled
       _initTimer();
@@ -180,6 +186,7 @@ class _HeartSensorState extends State<HeartSensor>
     _animationController?.value = 0.0;
     setState(() {
       _toggled = false;
+      _Saveme = true;
     });
   }
 
