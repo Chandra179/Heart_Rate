@@ -16,8 +16,8 @@ class HeartSensor extends StatefulWidget {
   _HeartSensorState createState() => _HeartSensorState();
 }
 
-class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStateMixin{
-
+class _HeartSensorState extends State<HeartSensor>
+    with SingleTickerProviderStateMixin {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -40,7 +40,8 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    _animationController =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     _animationController
       ..addListener(() {
         setState(() {
@@ -63,14 +64,18 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: ListView(children: <Widget>[
-        ///SHOW BPM NUMBER
-        Container(
-          padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
-          child: Container(
-            child: Center(
-                child: Column(
+        appBar: AppBar(
+          title: Text('Scan'),
+        ),
+        backgroundColor: Colors.white,
+        body: ListView(
+          children: <Widget>[
+            ///SHOW BPM NUMBER
+            Container(
+              padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
+              child: Container(
+                child: Center(
+                    child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -80,67 +85,67 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
                     ),
                     Text(
                       (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "--"),
-                      style: TextStyle(
-                          fontSize: 32, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                     ),
                   ],
                 )),
-          ),
-        ),
-
-        ///START THE HEART RATE SCANNING --> PRESS THE HEART BUTTON
-        Container(
-          child: Center(
-            child: Transform.scale(
-              scale: _iconScale,
-              child: IconButton(
-                splashRadius: 1,
-                icon:
-                Icon(_toggled ? Icons.favorite : Icons.favorite_border),
-                color: Colors.red,
-                iconSize: 128,
-                onPressed: () {
-                  if (_toggled) {
-                    _untoggle();
-                  } else {
-                    _toggle();
-                  }
-                },
               ),
             ),
-          ),
-        ),
 
-        ///SHOWING LINE CHART OF SCANNING PROCESS
-        Container(
-          child: SizedBox(
-            height: 100,
-            width: 150,
-            child: Container(
-              margin: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(18),
+            ///START THE HEART RATE SCANNING --> PRESS THE HEART BUTTON
+            Container(
+              child: Center(
+                child: Transform.scale(
+                  scale: _iconScale,
+                  child: IconButton(
+                    splashRadius: 1,
+                    icon:
+                        Icon(_toggled ? Icons.favorite : Icons.favorite_border),
+                    color: Colors.red,
+                    iconSize: 128,
+                    onPressed: () {
+                      if (_toggled) {
+                        _untoggle();
+                      } else {
+                        _toggle();
+                      }
+                    },
                   ),
-                  color: Colors.white),
-              child: Chart(_data),
+                ),
+              ),
             ),
-          ),
-        ),
-        RaisedButton(
-          child: Text('test'),
-          onPressed: () async {
-            final User user = FirebaseAuth.instance.currentUser;
-            final uid = user.uid;
-            await db.collection("dbuser")
-                .doc(uid)
-                .collection("heart_rate")
-                .add(Heart(tanggal, _bpm.toString()).toJson());
-            },
-        )
-      ],
-      )
-    );
+
+            ///SHOWING LINE CHART OF SCANNING PROCESS
+            Container(
+              child: SizedBox(
+                height: 100,
+                width: 150,
+                child: Container(
+                  margin: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(18),
+                      ),
+                      color: Colors.white),
+                  child: Chart(_data),
+                ),
+              ),
+            ),
+            RaisedButton(
+              child: Text('Save'),
+              onPressed: () async {
+                final User user = FirebaseAuth.instance.currentUser;
+                final uid = user.uid;
+                await db
+                    .collection("dbuser")
+                    .doc(uid)
+                    .collection("heart_rate")
+                    .add(Heart(tanggal, _bpm.toString()).toJson());
+              },
+            )
+          ],
+        ));
   }
 
   void _clearData() {
@@ -269,9 +274,7 @@ class _HeartSensorState extends State<HeartSensor> with SingleTickerProviderStat
       }
       await Future.delayed(Duration(
           milliseconds:
-          1000 * _windowLen ~/ _fs)); // wait for a new set of _data values
+              1000 * _windowLen ~/ _fs)); // wait for a new set of _data values
     }
   }
 }
-
-
