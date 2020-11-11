@@ -62,19 +62,53 @@ Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
     child: Column(
       children: <Widget>[
         ListTile(
-          leading: Icon(Icons.accessibility_sharp),
+          leading: Container(
+              child: Builder(
+                  builder: (context) {
+                    if (heartdata['icon'] == 4) {
+                      return Icon(
+                        Icons.accessibility_sharp,
+                        size: 18,);
+                    } else if (heartdata['icon'] == 2){
+                      return Icon(
+                        Icons.airline_seat_individual_suite_rounded,
+                        size: 18,);
+                    } else {
+                      return Icon(
+                        Icons.directions_run,
+                        size: 18,);
+                    }
+                  }
+              )
+          ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              new Text("Exercise"),
+              new Container(
+                  child: Builder(
+                      builder: (context) {
+                        if (heartdata['icon'] == 4) {
+                          return Text('General');
+                        } else if (heartdata['icon'] == 2){
+                          return Text('Rest');
+                        } else {
+                          return Text('Exercise');
+                        }
+                      }
+                  )
+              ),
               new Text(heartdata['bpm'].toString()),
-            ], ///RETRIEVE DATA
+            ],
+
+            ///RETRIEVE DATA
           ),
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                heartdata['tanggal'].toString(), ///RETRIEVE DATA
+                heartdata['tanggal'].toString(),
+
+                ///RETRIEVE DATA
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
               Icon(

@@ -8,6 +8,7 @@ import 'package:heart_rate/pages/userData.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:heart_rate/pages/home.dart';
 
 ///----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -38,6 +39,8 @@ class _HeartSensorState extends State<HeartSensor>
 
   String tanggal = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
   var _myColor = false;
+  var _myColor2 = false;
+  var _myColor3 = false;
 
   @override
   void initState() {
@@ -161,6 +164,8 @@ class _HeartSensorState extends State<HeartSensor>
                                 } else {
                                   setState(() {
                                     _myColor = true;
+                                    _myColor2 = false;
+                                    _myColor3 = false;
                                   });
                                 }
                               }),
@@ -168,42 +173,63 @@ class _HeartSensorState extends State<HeartSensor>
                               splashColor: Colors.yellow,
                               splashRadius: 20,
                               icon: Icon(
-                                Icons.accessibility_sharp,
-                                color: (_myColor ? Colors.black : Colors.grey),
+                                Icons.airline_seat_individual_suite_rounded,
+                                color: (_myColor2 ? Colors.black : Colors.grey),
                                 size: 30,
                               ),
                               onPressed: () {
-                                if (_myColor) {
+                                if (_myColor2) {
                                   setState(() {
-                                    _myColor = false;
+                                    _myColor2 = false;
                                   });
                                 } else {
                                   setState(() {
-                                    _myColor = true;
+                                    _myColor2 = true;
+                                    _myColor = false;
+                                    _myColor3 = false;
                                   });
                                 }
                               }),
-                          Icon(
-                            Icons.airline_seat_individual_suite_rounded,
-                            size: 30,
-                          ),
-                          Icon(
-                            Icons.directions_run,
-                            size: 30,
-                          ),
+                          IconButton(
+                              splashColor: Colors.yellow,
+                              splashRadius: 20,
+                              icon: Icon(
+                                Icons.directions_run,
+                                color: (_myColor3 ? Colors.black : Colors.grey),
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                if (_myColor3) {
+                                  setState(() {
+                                    _myColor3 = false;
+                                  });
+                                } else {
+                                  setState(() {
+                                    _myColor3 = true;
+                                    _myColor = false;
+                                    _myColor2 = false;
+                                  });
+                                }
+                              }),
                         ],
                       ),
                     ),
                     RaisedButton(
                       child: Text('Save'),
                       onPressed: () async {
+
+                        final myIcon = _iconController();
                         final User user = FirebaseAuth.instance.currentUser;
                         final uid = user.uid;
                         await db
                             .collection("dbuser")
                             .doc(uid)
                             .collection("heart_rate")
-                            .add(Heart(tanggal, _bpm.toString()).toJson());
+                            .add(Heart(tanggal, _bpm.toString(), myIcon).toJson());
+
+                        setState(() {
+                          _Saveme = false;
+                        });
                       },
                     ),
                   ],
@@ -231,6 +257,9 @@ class _HeartSensorState extends State<HeartSensor>
       setState(() {
         _toggled = true;
         _Saveme = false;
+        _myColor = false;
+        _myColor2 = false;
+        _myColor3 = false;
       });
       // after is toggled
       _initTimer();
@@ -248,6 +277,17 @@ class _HeartSensorState extends State<HeartSensor>
       _Saveme = true;
     });
   }
+
+  int _iconController () {
+    if (_myColor) {
+      return 4;
+    } else if (_myColor2) {
+      return 2;
+    } else {
+      return 9;
+    }
+  }
+
 
   void _disposeController() {
     _controller?.dispose();
