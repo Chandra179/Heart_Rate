@@ -21,7 +21,17 @@ class _Login extends State<Login> {
   bool _passwordVisible;
 
   @override
-  void initState(){
+  void initState() async {
+     Auth.currentUser().then((user) {
+      if (user != null) { //if there isn't any user currentUser function returns a null so we should check this case. 
+        Navigator.pushAndRemoveUntil(
+            // we are making YourHomePage widget the root if there is a user.
+            context,
+            MaterialPageRoute(builder: (context) => Menu()),
+            (Route<dynamic> route) => false);
+      }
+    });
+    super.initState();
     _passwordVisible = false;
   }
 

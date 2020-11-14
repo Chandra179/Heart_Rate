@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:heart_rate/pages/auth.dart';
+import 'package:heart_rate/pages/login.dart';
+
 
 class Profile extends StatefulWidget {
   @override
@@ -10,11 +13,26 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Account'),
+        title: Text('Profile'),
       ),
-      body: Container(
-        child: Text('Chandra'),
-      ),
+      body: Center(
+        child: Column(children: <Widget>[
+            Text("Profile"),
+            RaisedButton(
+              child: Text("Log Out"),
+              onPressed: () async {
+                await Auth.signOut().then((value) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()));
+
+                });
+                
+              },
+            ),
+          ],
+        )
+      )
     );
   }
 }
