@@ -35,7 +35,7 @@ bool isLoading = true;
             Expanded(
               flex: 4,
               child: Padding(
-                padding: const EdgeInsets.all(50),
+                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                 child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -72,42 +72,47 @@ bool isLoading = true;
                       future: getUserInfo(),
                       builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
-                          return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: 1,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                  title:
-                                      Text(
-                                        snapshot.data['name'],
-                                        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                                        
+                          return Flexible(
+                            child: SizedBox(
+                              width: 180,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: 1,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return ListTile(
+                                      title:
+                                          Text(
+                                            snapshot.data['name'],
+                                            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                                            
+                                              ),
+                                      subtitle: Row(
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.wc,
+                                            size: 15,
+                                            color: Colors.lightBlue,
                                           ),
-                                  subtitle: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.wc,
-                                        size: 15,
-                                        color: Colors.lightBlue,
-                                      ),
-                                      Text(
-                                        snapshot.data['gender'] +"    ",
-                                        style: TextStyle(fontSize: 15.0)
-                                      ),
-                                      Icon(
-                                        Icons.verified_user,
-                                        size: 15,
-                                        color: Colors.lightBlue,
-                                      ), 
-                                      Text (
-                                        snapshot.data['umur'] + " Tahun",
-                                        style: TextStyle(fontSize: 15.0),
-                                      )
-                                    ],
-                                    )  
-                                );
-                              },
-                              );
+                                          Text(
+                                            snapshot.data['gender'] +"    ",
+                                            style: TextStyle(fontSize: 15.0)
+                                          ),
+                                          Icon(
+                                            Icons.verified_user,
+                                            size: 15,
+                                            color: Colors.lightBlue,
+                                          ), 
+                                          Text (
+                                            snapshot.data['umur'] + " Tahun",
+                                            style: TextStyle(fontSize: 15.0),
+                                          )
+                                        ],
+                                        )  
+                                    );
+                                  },
+                                  ),
+                            ),
+                          );
                         } else if (snapshot.connectionState == ConnectionState.none) {
                           return Text("No data");
                         }

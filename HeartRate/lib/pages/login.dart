@@ -21,7 +21,7 @@ class _Login extends State<Login> {
   bool _passwordVisible;
 
   @override
-  void initState() async {
+  void initState() {
      Auth.currentUser().then((user) {
       if (user != null) { //if there isn't any user currentUser function returns a null so we should check this case. 
         Navigator.pushAndRemoveUntil(
