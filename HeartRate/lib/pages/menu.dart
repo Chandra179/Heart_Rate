@@ -24,7 +24,7 @@ class _MainState extends State<Menu> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        iconSize: 25,
+        iconSize: 20,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
