@@ -8,8 +8,6 @@ import 'package:heart_rate/pages/userData.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:heart_rate/pages/home.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 ///----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -37,6 +35,7 @@ class _HeartSensorState extends State<HeartSensor>
   DateTime _now; // store the now Datetime
   Timer _timer; // timer for image processing
   bool _Saveme = false; //Save data to dbase
+  int _valueSlider = 0;
 
   String tanggal = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
   var _myColor = false;
@@ -144,11 +143,40 @@ class _HeartSensorState extends State<HeartSensor>
                 visible: _Saveme,
                 child: Column(
                   children: <Widget>[
-                    Container(
-
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('0'),
+                        Container(
+                            child: SizedBox(
+                              height: 35,
+                              width: 300,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  gradient: new LinearGradient(
+                                    colors: [
+                                      Colors.green,
+                                      Colors.yellow,
+                                      Colors.red,
+                                    ],
+                                  )
+                                ),
+                                child:  Slider(
+                                    value: _valueSlider.toDouble(),
+                                    min: 0.0,
+                                    max: 200.0,
+                                    divisions: 10,
+                                    label: _valueSlider.toString(),
+                                ),
+                              )
+                            )
+                        ),
+                        Text('300'),
+                      ],
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(0, 5, 0, 100),
+                      padding: EdgeInsets.fromLTRB(0, 5, 0, 50),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -283,7 +311,6 @@ class _HeartSensorState extends State<HeartSensor>
                             borderRadius: BorderRadius.circular(18.0),
                           ),
                           onPressed: () async {
-
                             final myIcon = _iconController();
                             final User user = FirebaseAuth.instance.currentUser;
                             final uid = user.uid;
@@ -343,6 +370,7 @@ class _HeartSensorState extends State<HeartSensor>
     setState(() {
       _toggled = false;
       _Saveme = true;
+      _valueSlider = _bpm;
     });
   }
 
