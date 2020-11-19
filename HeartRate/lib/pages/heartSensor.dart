@@ -149,40 +149,54 @@ class _HeartSensorState extends State<HeartSensor>
                         children: <Widget>[
                           Column(
                             children: [
-                              Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 3.0, color: Colors.blue),
+                              Card(
+                                elevation: 3,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.white70, width: 1),
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: (_myColor
+                                                ? Colors.blue
+                                                : Colors.white),
+                                          )
+                                        ],
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            width: 3.0, color: Colors.white),
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(0, 0, 3, 2),
+                                      child: IconButton(
+                                          splashColor: Colors.yellow,
+                                          splashRadius: 20,
+                                          icon: Icon(
+                                            Icons.accessibility_sharp,
+                                            color: (_myColor
+                                                ? Colors.black
+                                                : Colors.grey),
+                                            size: 35,
+                                          ),
+                                          onPressed: () {
+                                            if (_myColor) {
+                                              setState(() {
+                                                _myColor = false;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                _myColor = true;
+                                                _myColor2 = false;
+                                                _myColor3 = false;
+                                              });
+                                            }
+                                          }),
                                     ),
-                                    padding: EdgeInsets.fromLTRB(2, 0, 3, 2),
-                                    child: IconButton(
-                                        splashColor: Colors.yellow,
-                                        splashRadius: 20,
-                                        icon: Icon(
-                                          Icons.accessibility_sharp,
-                                          color: (_myColor
-                                              ? Colors.black
-                                              : Colors.grey),
-                                          size: 35,
-                                        ),
-                                        onPressed: () {
-                                          if (_myColor) {
-                                            setState(() {
-                                              _myColor = false;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _myColor = true;
-                                              _myColor2 = false;
-                                              _myColor3 = false;
-                                            });
-                                          }
-                                        }),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               Padding(
                                 padding:
@@ -200,40 +214,54 @@ class _HeartSensorState extends State<HeartSensor>
                           ),
                           Column(
                             children: [
-                              Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 3.0, color: Colors.blue),
+                              Card(
+                                elevation: 3,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.white70, width: 1),
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: (_myColor3
+                                                ? Colors.blue
+                                                : Colors.white),
+                                          )
+                                        ],
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            width: 3.0, color: Colors.white),
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(2, 0, 3, 2),
+                                      child: IconButton(
+                                          splashColor: Colors.yellow,
+                                          splashRadius: 20,
+                                          icon: Icon(
+                                            Icons.directions_run,
+                                            color: (_myColor3
+                                                ? Colors.black
+                                                : Colors.grey),
+                                            size: 35,
+                                          ),
+                                          onPressed: () {
+                                            if (_myColor3) {
+                                              setState(() {
+                                                _myColor3 = false;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                _myColor3 = true;
+                                                _myColor = false;
+                                                _myColor2 = false;
+                                              });
+                                            }
+                                          }),
                                     ),
-                                    padding: EdgeInsets.fromLTRB(2, 0, 3, 2),
-                                    child: IconButton(
-                                        splashColor: Colors.yellow,
-                                        splashRadius: 20,
-                                        icon: Icon(
-                                          Icons.directions_run,
-                                          color: (_myColor3
-                                              ? Colors.black
-                                              : Colors.grey),
-                                          size: 35,
-                                        ),
-                                        onPressed: () {
-                                          if (_myColor3) {
-                                            setState(() {
-                                              _myColor3 = false;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _myColor3 = true;
-                                              _myColor = false;
-                                              _myColor2 = false;
-                                            });
-                                          }
-                                        }),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               Padding(
                                 padding:
@@ -251,41 +279,55 @@ class _HeartSensorState extends State<HeartSensor>
                           ),
                           Column(
                             children: [
-                              Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 3.0, color: Colors.blue),
+                              Card(
+                                elevation: 3,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.white70, width: 1),
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: (_myColor2
+                                                ? Colors.blue
+                                                : Colors.white),
+                                          )
+                                        ],
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            width: 3.0, color: Colors.white),
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(2, 0, 2, 2),
+                                      child: IconButton(
+                                          splashColor: Colors.yellow,
+                                          splashRadius: 20,
+                                          icon: Icon(
+                                            Icons
+                                                .airline_seat_individual_suite_rounded,
+                                            color: (_myColor2
+                                                ? Colors.black
+                                                : Colors.grey),
+                                            size: 35,
+                                          ),
+                                          onPressed: () {
+                                            if (_myColor2) {
+                                              setState(() {
+                                                _myColor2 = false;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                _myColor2 = true;
+                                                _myColor = false;
+                                                _myColor3 = false;
+                                              });
+                                            }
+                                          }),
                                     ),
-                                    padding: EdgeInsets.fromLTRB(2, 0, 2, 2),
-                                    child: IconButton(
-                                        splashColor: Colors.yellow,
-                                        splashRadius: 20,
-                                        icon: Icon(
-                                          Icons
-                                              .airline_seat_individual_suite_rounded,
-                                          color: (_myColor2
-                                              ? Colors.black
-                                              : Colors.grey),
-                                          size: 35,
-                                        ),
-                                        onPressed: () {
-                                          if (_myColor2) {
-                                            setState(() {
-                                              _myColor2 = false;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _myColor2 = true;
-                                              _myColor = false;
-                                              _myColor3 = false;
-                                            });
-                                          }
-                                        }),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               Padding(
                                 padding:
