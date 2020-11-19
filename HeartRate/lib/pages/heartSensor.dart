@@ -35,6 +35,7 @@ class _HeartSensorState extends State<HeartSensor>
   DateTime _now; // store the now Datetime
   Timer _timer; // timer for image processing
   bool _Saveme = false; //Save data to dbase
+  bool _ShowGraph = false;
 
   String tanggal = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
   var _myColor = false;
@@ -121,18 +122,21 @@ class _HeartSensorState extends State<HeartSensor>
             ),
 
             ///SHOWING LINE CHART OF SCANNING PROCESS
-            Container(
-              child: SizedBox(
-                height: 100,
-                width: 150,
-                child: Container(
-                  margin: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(18),
-                      ),
-                      color: Colors.white),
-                  child: Chart(_data),
+            Visibility(
+              visible: _ShowGraph,
+              child: Container(
+                child: SizedBox(
+                  height: 100,
+                  width: 150,
+                  child: Container(
+                    margin: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(18),
+                        ),
+                        color: Colors.white),
+                    child: Chart(_data),
+                  ),
                 ),
               ),
             ),
@@ -411,6 +415,7 @@ class _HeartSensorState extends State<HeartSensor>
       setState(() {
         _toggled = true;
         _Saveme = false;
+        _ShowGraph = true;
         _myColor = false;
         _myColor2 = false;
         _myColor3 = false;
@@ -428,6 +433,7 @@ class _HeartSensorState extends State<HeartSensor>
     _animationController?.value = 0.0;
     setState(() {
       _toggled = false;
+      _ShowGraph = false;
       _Saveme = true;
     });
   }
