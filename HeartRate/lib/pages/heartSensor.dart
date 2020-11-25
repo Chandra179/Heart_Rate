@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:wakelock/wakelock.dart';
 import '../component/chart.dart';
 import 'package:heart_rate/pages/userData.dart';
@@ -76,47 +77,98 @@ class _HeartSensorState extends State<HeartSensor>
         body: ListView(
           children: <Widget>[
             ///SHOW BPM NUMBER
-            Container(
-              padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
-              child: Container(
-                child: Center(
-                    child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Estimated BPM",
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
-                    ),
-                    Text(
-                      (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "--"),
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                )),
-              ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
+            //   child: Container(
+            //     child: Center(
+            //         child: Column(
+            //       mainAxisSize: MainAxisSize.min,
+            //       crossAxisAlignment: CrossAxisAlignment.center,
+            //       children: <Widget>[
+            //         Text(
+            //           "Estimated BPM",
+            //           style: TextStyle(fontSize: 18, color: Colors.grey),
+            //         ),
+            //         Text(
+            //           (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "--"),
+            //           style:
+            //               TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            //         ),
+            //       ],
+            //     )),
+            //   ),
+            // ),
 
             ///START THE HEART RATE SCANNING --> PRESS THE HEART BUTTON
+            // Container(
+            //   child: Center(
+            //     child: Transform.scale(
+            //       scale: _iconScale,
+            //       child: IconButton(
+            //         splashRadius: 1,
+            //         icon:
+            //             Icon(_toggled ? Icons.favorite : Icons.favorite_border),
+            //         color: Colors.red,
+            //         iconSize: 128,
+            //         onPressed: () {
+            //           if (_toggled) {
+            //             _untoggle();
+            //           } else {
+            //             _toggle();
+            //           }
+            //         },
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
             Container(
-              child: Center(
-                child: Transform.scale(
-                  scale: _iconScale,
-                  child: IconButton(
-                    splashRadius: 1,
-                    icon:
-                        Icon(_toggled ? Icons.favorite : Icons.favorite_border),
-                    color: Colors.red,
-                    iconSize: 128,
-                    onPressed: () {
-                      if (_toggled) {
-                        _untoggle();
-                      } else {
-                        _toggle();
-                      }
-                    },
-                  ),
+              padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+              child: RawMaterialButton(
+                onPressed: () {
+                  if (_toggled) {
+                    _untoggle();
+                  } else {
+                    _toggle();
+                  }
+                },
+                elevation: 2.0,
+                fillColor: Colors.white,
+                child: Column(
+                  children: [
+                    Transform.scale(
+                      scale: _iconScale,
+                      child: IconButton(
+                        iconSize: 20,
+                        splashRadius: 1,
+                        icon: Icon(
+                            _toggled ? Icons.favorite : Icons.favorite_border),
+                        color: Colors.red,
+                        onPressed: () {
+                          if (_toggled) {
+                            _untoggle();
+                          } else {
+                            _toggle();
+                          }
+                        },
+                      ),
+                    ),
+                    Text(
+                      (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "0"),
+                      style:
+                          TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                      child: Text('Bpm',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                shape: CircleBorder(
+                  side: BorderSide(color: Colors.blue, width: 5),
                 ),
               ),
             ),
@@ -156,7 +208,8 @@ class _HeartSensorState extends State<HeartSensor>
                               Card(
                                 elevation: 3,
                                 shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: Colors.white70, width: 1),
+                                  side: BorderSide(
+                                      color: Colors.white70, width: 1),
                                   borderRadius: BorderRadius.circular(40),
                                 ),
                                 child: Column(
@@ -221,7 +274,8 @@ class _HeartSensorState extends State<HeartSensor>
                               Card(
                                 elevation: 3,
                                 shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: Colors.white70, width: 1),
+                                  side: BorderSide(
+                                      color: Colors.white70, width: 1),
                                   borderRadius: BorderRadius.circular(40),
                                 ),
                                 child: Column(
@@ -286,7 +340,8 @@ class _HeartSensorState extends State<HeartSensor>
                               Card(
                                 elevation: 3,
                                 shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: Colors.white70, width: 1),
+                                  side: BorderSide(
+                                      color: Colors.white70, width: 1),
                                   borderRadius: BorderRadius.circular(40),
                                 ),
                                 child: Column(
@@ -363,6 +418,7 @@ class _HeartSensorState extends State<HeartSensor>
                             onPressed: () {
                               setState(() {
                                 _Saveme = false;
+                                _bpm = 0;
                               });
                             }),
                         RaisedButton(
@@ -419,6 +475,7 @@ class _HeartSensorState extends State<HeartSensor>
         _myColor = false;
         _myColor2 = false;
         _myColor3 = false;
+        _bpm = 0;
       });
       // after is toggled
       _initTimer();
