@@ -71,59 +71,78 @@ class _HeartSensorState extends State<HeartSensor>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Scan'),
+          title: Padding(
+            padding: const EdgeInsets.fromLTRB(105, 0, 0, 0),
+            child: Text('Scan'),
+          ),
+          leading: Visibility(
+            visible: _Saveme,
+            child: IconButton(
+                icon: Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _Saveme = false;
+                    _bpm = 0;
+                  });
+                },
+              ),
+          ),
+          elevation: 4,
+          actions: <Widget>[
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
+              child: Visibility(
+                visible: _Saveme,
+                child: Container(
+                  color: Colors.blue,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.check_rounded,
+                      color: Colors.white,
+                    ),
+                    onPressed: () async {
+
+                      // if (_iconController() == 0) {
+                      //   SnackBar(
+                      //     content: Row(
+                      //       children: [
+                      //         Icon(Icons.warning),
+                      //         SizedBox(width: 20),
+                      //         Expanded(child: Text('Choose Activity!', style: TextStyle(color: Colors.black),))
+                      //       ],
+                      //     ),
+                      //   );
+                      // }
+
+                      final myIcon = _iconController();
+                      final User user = FirebaseAuth.instance.currentUser;
+                      final uid = user.uid;
+                      await db
+                          .collection("dbuser")
+                          .doc(uid)
+                          .collection("heart_rate")
+                          .add(Heart(tanggal, _bpm.toString(), myIcon)
+                          .toJson());
+
+                      setState(() {
+                        _Saveme = false;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         backgroundColor: Colors.white,
         body: ListView(
           children: <Widget>[
-            ///SHOW BPM NUMBER
-            // Container(
-            //   padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
-            //   child: Container(
-            //     child: Center(
-            //         child: Column(
-            //       mainAxisSize: MainAxisSize.min,
-            //       crossAxisAlignment: CrossAxisAlignment.center,
-            //       children: <Widget>[
-            //         Text(
-            //           "Estimated BPM",
-            //           style: TextStyle(fontSize: 18, color: Colors.grey),
-            //         ),
-            //         Text(
-            //           (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "--"),
-            //           style:
-            //               TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            //         ),
-            //       ],
-            //     )),
-            //   ),
-            // ),
-
-            ///START THE HEART RATE SCANNING --> PRESS THE HEART BUTTON
-            // Container(
-            //   child: Center(
-            //     child: Transform.scale(
-            //       scale: _iconScale,
-            //       child: IconButton(
-            //         splashRadius: 1,
-            //         icon:
-            //             Icon(_toggled ? Icons.favorite : Icons.favorite_border),
-            //         color: Colors.red,
-            //         iconSize: 128,
-            //         onPressed: () {
-            //           if (_toggled) {
-            //             _untoggle();
-            //           } else {
-            //             _toggle();
-            //           }
-            //         },
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
+            ///BPM INDICATOR
             Container(
-              padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+              padding: EdgeInsets.fromLTRB(0, 70, 0, 50),
               child: RawMaterialButton(
                 onPressed: () {
                   if (_toggled) {
@@ -136,39 +155,34 @@ class _HeartSensorState extends State<HeartSensor>
                 fillColor: Colors.white,
                 child: Column(
                   children: [
-                    Transform.scale(
-                      scale: _iconScale,
-                      child: IconButton(
-                        iconSize: 20,
-                        splashRadius: 1,
-                        icon: Icon(
-                            _toggled ? Icons.favorite : Icons.favorite_border),
-                        color: Colors.red,
-                        onPressed: () {
-                          if (_toggled) {
-                            _untoggle();
-                          } else {
-                            _toggle();
-                          }
-                        },
-                      ),
-                    ),
                     Text(
                       (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "0"),
                       style:
-                          TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                      child: Text('Bpm',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Text('Bpm',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                        ),
+                        Container(
+                          child: Icon(
+                            Icons.favorite,
+                            size: 15,
+                            color: Colors.red,
+                          ),
+                        )
+                      ],
                     ),
                   ],
                 ),
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                padding: EdgeInsets.fromLTRB(70, 70, 70, 70),
                 shape: CircleBorder(
-                  side: BorderSide(color: Colors.blue, width: 5),
+                  side: BorderSide(color: Colors.blue, width: 8),
                 ),
               ),
             ),
@@ -405,47 +419,6 @@ class _HeartSensorState extends State<HeartSensor>
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        RaisedButton(
-                            child: Text('Cancel'),
-                            color: Colors.red,
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _Saveme = false;
-                                _bpm = 0;
-                              });
-                            }),
-                        RaisedButton(
-                          child: Text('Save'),
-                          color: Colors.green,
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          onPressed: () async {
-                            final myIcon = _iconController();
-                            final User user = FirebaseAuth.instance.currentUser;
-                            final uid = user.uid;
-                            await db
-                                .collection("dbuser")
-                                .doc(uid)
-                                .collection("heart_rate")
-                                .add(Heart(tanggal, _bpm.toString(), myIcon)
-                                    .toJson());
-
-                            setState(() {
-                              _Saveme = false;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
                   ],
                 ))
           ],
@@ -500,8 +473,10 @@ class _HeartSensorState extends State<HeartSensor>
       return 4;
     } else if (_myColor2) {
       return 2;
-    } else {
+    } else if (_myColor3){
       return 9;
+    } else {
+      return 0;
     }
   }
 
