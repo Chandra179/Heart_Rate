@@ -9,6 +9,7 @@ import 'package:heart_rate/pages/userData.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:heart_rate/pages/popupDialog.dart';
 
 ///----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -104,19 +105,6 @@ class _HeartSensorState extends State<HeartSensor>
                       color: Colors.white,
                     ),
                     onPressed: () async {
-
-                      // if (_iconController() == 0) {
-                      //   SnackBar(
-                      //     content: Row(
-                      //       children: [
-                      //         Icon(Icons.warning),
-                      //         SizedBox(width: 20),
-                      //         Expanded(child: Text('Choose Activity!', style: TextStyle(color: Colors.black),))
-                      //       ],
-                      //     ),
-                      //   );
-                      // }
-
                       final myIcon = _iconController();
                       final User user = FirebaseAuth.instance.currentUser;
                       final uid = user.uid;
@@ -205,6 +193,11 @@ class _HeartSensorState extends State<HeartSensor>
                   ),
                 ),
               ),
+            ),
+
+            ///ALERT
+            Container(
+              child: AlertDialogWidget(_bpm),
             ),
 
             ///SAVE TO DATABASE
