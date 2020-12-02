@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:wakelock/wakelock.dart';
 import '../component/chart.dart';
-import 'package:heart_rate/pages/userData.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:heart_rate/pages/userData.dart';
 
 ///----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -34,10 +35,12 @@ class _HeartSensorState extends State<HeartSensor>
   double _avg; // store the average value during calculation
   DateTime _now; // store the now Datetime
   Timer _timer; // timer for image processing
-  bool _Saveme = false; //Save data to dbase
-  int _valueSlider = 0;
+  bool _ShowGraph = false;
 
+  bool _Saveme = false; //Save data to dbase
+  bool _StartScan = true;
   String tanggal = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
+
   var _myColor = false;
   var _myColor2 = false;
   var _myColor3 = false;
@@ -70,269 +73,97 @@ class _HeartSensorState extends State<HeartSensor>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Scan'),
+          title: Center(child: Text('Scan')),
+          elevation: 4,
         ),
         backgroundColor: Colors.white,
-        body: ListView(
-          children: <Widget>[
-            ///SHOW BPM NUMBER
-            Container(
-              padding: EdgeInsets.fromLTRB(50, 50, 50, 0),
-              child: Container(
-                child: Center(
-                    child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Estimated BPM",
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
-                    ),
-                    Text(
-                      (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "--"),
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                )),
-              ),
-            ),
-
-            ///START THE HEART RATE SCANNING --> PRESS THE HEART BUTTON
-            Container(
-              child: Center(
-                child: Transform.scale(
-                  scale: _iconScale,
-                  child: IconButton(
-                    splashRadius: 1,
-                    icon:
-                        Icon(_toggled ? Icons.favorite : Icons.favorite_border),
-                    color: Colors.red,
-                    iconSize: 128,
-                    onPressed: () {
-                      if (_toggled) {
-                        _untoggle();
-                      } else {
-                        _toggle();
-                      }
-                    },
+        body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [Colors.white, Colors.blue])),
+          child: ListView(
+            children: <Widget>[
+              ///BPM INDICATOR
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 100, 0, 30),
+                child: RawMaterialButton(
+                  onPressed: () {
+                    if (_toggled) {
+                      _untoggle();
+                    } else {
+                      _toggle();
+                    }
+                  },
+                  elevation: 2.0,
+                  fillColor: Colors.white,
+                  child: Column(
+                    children: [
+                      Text(
+                        (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "0"),
+                        style:
+                            TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Text('Bpm',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                          ),
+                          Container(
+                            child: Icon(
+                              Icons.favorite,
+                              size: 15,
+                              color: Colors.red,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.fromLTRB(70, 70, 70, 70),
+                  shape: CircleBorder(
+                    side: BorderSide(color: Colors.blue, width: 8),
                   ),
                 ),
               ),
-            ),
 
-            ///SHOWING LINE CHART OF SCANNING PROCESS
-            Container(
-              child: SizedBox(
-                height: 100,
-                width: 150,
+              Center(
+                child: Visibility(visible: _StartScan, child: Text('Press to start!')),
+              ),
+              Center(
+                child: Visibility(visible: _toggled, child: Text('Press to stop!')),
+              ),
+
+              ///SHOWING LINE CHART OF SCANNING PROCESS
+              Visibility(
+                visible: _ShowGraph,
                 child: Container(
-                  margin: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(18),
-                      ),
-                      color: Colors.white),
-                  child: Chart(_data),
+                  child: SizedBox(
+                    height: 70,
+                    width: 130,
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(40, 12, 40, 0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50),
+                          ),
+                          color: Colors.white),
+                      child: Chart(_data),
+                    ),
+                  ),
                 ),
               ),
-            ),
-
-            ///SAVE TO DATABASE
-            Visibility(
-                visible: _Saveme,
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('0'),
-                        Container(
-                            child: SizedBox(
-                              height: 35,
-                              width: 300,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  gradient: new LinearGradient(
-                                    colors: [
-                                      Colors.green,
-                                      Colors.yellow,
-                                      Colors.red,
-                                    ],
-                                  )
-                                ),
-                                child:  Slider(
-                                    value: _valueSlider.toDouble(),
-                                    min: 0.0,
-                                    max: 200.0,
-                                    divisions: 10,
-                                    label: _valueSlider.toString(),
-                                ),
-                              )
-                            )
-                        ),
-                        Text('300'),
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 5, 0, 50),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Column(
-                            children: [
-                              IconButton(
-                                  splashColor: Colors.yellow,
-                                  splashRadius: 20,
-                                  icon: Icon(
-                                    Icons.accessibility_sharp,
-                                    color: (_myColor ? Colors.black : Colors.grey),
-                                    size: 40,
-                                  ),
-                                  onPressed: () {
-                                    if (_myColor) {
-                                      setState(() {
-                                        _myColor = false;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _myColor = true;
-                                        _myColor2 = false;
-                                        _myColor3 = false;
-                                      });
-                                    }
-                                  }),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(8, 2, 0, 0),
-                                child: Text(
-                                  'General',
-                                  style: new TextStyle(
-                                  fontSize: 10.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              IconButton(
-                                  splashColor: Colors.yellow,
-                                  splashRadius: 20,
-                                  icon: Icon(
-                                    Icons.airline_seat_individual_suite_rounded,
-                                    color: (_myColor2 ? Colors.black : Colors.grey),
-                                    size: 40,
-                                  ),
-                                  onPressed: () {
-                                    if (_myColor2) {
-                                      setState(() {
-                                        _myColor2 = false;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _myColor2 = true;
-                                        _myColor = false;
-                                        _myColor3 = false;
-                                      });
-                                    }
-                                  }),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(8, 2, 0, 0),
-                                child: Text(
-                                  'Rest',
-                                  style: new TextStyle(
-                                    fontSize: 10.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              IconButton(
-                                  splashColor: Colors.yellow,
-                                  splashRadius: 20,
-                                  icon: Icon(
-                                    Icons.directions_run,
-                                    color: (_myColor3 ? Colors.black : Colors.grey),
-                                    size: 40,
-                                  ),
-                                  onPressed: () {
-                                    if (_myColor3) {
-                                      setState(() {
-                                        _myColor3 = false;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _myColor3 = true;
-                                        _myColor = false;
-                                        _myColor2 = false;
-                                      });
-                                    }
-                                  }),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(8, 2, 0, 0),
-                                child: Text(
-                                  'Exercise',
-                                  style: new TextStyle(
-                                    fontSize: 10.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        RaisedButton(
-                            child: Text('Cancel'),
-                            color: Colors.red,
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _Saveme = false;
-                              });
-                            }),
-                        RaisedButton(
-                          child: Text('Save'),
-                          color: Colors.green,
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          onPressed: () async {
-                            final myIcon = _iconController();
-                            final User user = FirebaseAuth.instance.currentUser;
-                            final uid = user.uid;
-                            await db
-                                .collection("dbuser")
-                                .doc(uid)
-                                .collection("heart_rate")
-                                .add(Heart(tanggal, _bpm.toString(), myIcon).toJson());
-
-                            setState(() {
-                              _Saveme = false;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ))
-          ],
+            ],
+          ),
         ));
   }
 
+  /// Refresh data saat scanning
   void _clearData() {
     // create array of 128 ~= 255/2
     _data.clear();
@@ -351,10 +182,9 @@ class _HeartSensorState extends State<HeartSensor>
       _animationController?.repeat(reverse: true);
       setState(() {
         _toggled = true;
-        _Saveme = false;
-        _myColor = false;
-        _myColor2 = false;
-        _myColor3 = false;
+        _ShowGraph = true;
+        _bpm = 0;
+        _StartScan = false;
       });
       // after is toggled
       _initTimer();
@@ -363,27 +193,29 @@ class _HeartSensorState extends State<HeartSensor>
   }
 
   void _untoggle() {
+    showAlert(context);
     _disposeController();
     Wakelock.disable();
     _animationController?.stop();
     _animationController?.value = 0.0;
     setState(() {
       _toggled = false;
-      _Saveme = true;
-      _valueSlider = _bpm;
+      _ShowGraph = false;
+      _StartScan = true;
     });
   }
 
-  int _iconController () {
+  int _iconController() {
     if (_myColor) {
       return 4;
     } else if (_myColor2) {
       return 2;
-    } else {
+    } else if (_myColor3) {
       return 9;
+    } else {
+      return 0;
     }
   }
-
 
   void _disposeController() {
     _controller?.dispose();
@@ -409,7 +241,7 @@ class _HeartSensorState extends State<HeartSensor>
 
   ///HEART SCANNING TIMER
   void _initTimer() {
-    _timer = Timer.periodic(Duration(milliseconds: 1000 ~/ _fs), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 500 ~/ _fs), (timer) {
       if (_toggled) {
         if (_image != null) _scanImage(_image);
       } else {
@@ -476,7 +308,302 @@ class _HeartSensorState extends State<HeartSensor>
       }
       await Future.delayed(Duration(
           milliseconds:
-              1000 * _windowLen ~/ _fs)); // wait for a new set of _data values
+              500 * _windowLen ~/ _fs)); // wait for a new set of _data values
     }
+  }
+
+  showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title: new Text('Choose Activity'),
+            content: SingleChildScrollView(
+              child: Container(
+                width: double.maxFinite,
+                child: Column(
+                  children: <Widget>[
+                    Divider(),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.18,
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Column(
+                                  children: [
+                                    Card(
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.white70, width: 1),
+                                        borderRadius: BorderRadius.circular(40),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: (_myColor
+                                                      ? Colors.blue
+                                                      : Colors.white),
+                                                )
+                                              ],
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  width: 3.0,
+                                                  color: Colors.white),
+                                            ),
+                                            padding:
+                                                EdgeInsets.fromLTRB(0, 0, 3, 2),
+                                            child: IconButton(
+                                                splashColor: Colors.yellow,
+                                                splashRadius: 20,
+                                                icon: Icon(
+                                                  Icons.accessibility_sharp,
+                                                  color: (_myColor
+                                                      ? Colors.black
+                                                      : Colors.grey),
+                                                  size: 35,
+                                                ),
+                                                onPressed: () {
+                                                  if (_myColor) {
+                                                    setState(() {
+                                                      _myColor = false;
+                                                    });
+                                                  } else {
+                                                    setState(() {
+                                                      _myColor = true;
+                                                      _myColor2 = false;
+                                                      _myColor3 = false;
+                                                    });
+                                                  }
+                                                }),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 10),
+                                      child: Text(
+                                        'General',
+                                        style: new TextStyle(
+                                          fontSize: 9.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Card(
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.white70, width: 1),
+                                        borderRadius: BorderRadius.circular(40),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: (_myColor3
+                                                      ? Colors.blue
+                                                      : Colors.white),
+                                                )
+                                              ],
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  width: 3.0,
+                                                  color: Colors.white),
+                                            ),
+                                            padding:
+                                                EdgeInsets.fromLTRB(2, 0, 3, 2),
+                                            child: IconButton(
+                                                splashColor: Colors.yellow,
+                                                splashRadius: 20,
+                                                icon: Icon(
+                                                  Icons.directions_run,
+                                                  color: (_myColor3
+                                                      ? Colors.black
+                                                      : Colors.grey),
+                                                  size: 35,
+                                                ),
+                                                onPressed: () {
+                                                  if (_myColor3) {
+                                                    setState(() {
+                                                      _myColor3 = false;
+                                                    });
+                                                  } else {
+                                                    setState(() {
+                                                      _myColor3 = true;
+                                                      _myColor = false;
+                                                      _myColor2 = false;
+                                                    });
+                                                  }
+                                                }),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 10),
+                                      child: Text(
+                                        'Exercise',
+                                        style: new TextStyle(
+                                          fontSize: 9.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Card(
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.white70, width: 1),
+                                        borderRadius: BorderRadius.circular(40),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: (_myColor2
+                                                      ? Colors.blue
+                                                      : Colors.white),
+                                                )
+                                              ],
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  width: 3.0,
+                                                  color: Colors.white),
+                                            ),
+                                            padding:
+                                                EdgeInsets.fromLTRB(2, 0, 2, 2),
+                                            child: IconButton(
+                                                splashColor: Colors.yellow,
+                                                splashRadius: 20,
+                                                icon: Icon(
+                                                  Icons
+                                                      .airline_seat_individual_suite_rounded,
+                                                  color: (_myColor2
+                                                      ? Colors.black
+                                                      : Colors.grey),
+                                                  size: 35,
+                                                ),
+                                                onPressed: () {
+                                                  if (_myColor2) {
+                                                    setState(() {
+                                                      _myColor2 = false;
+                                                    });
+                                                  } else {
+                                                    setState(() {
+                                                      _myColor2 = true;
+                                                      _myColor = false;
+                                                      _myColor3 = false;
+                                                    });
+                                                  }
+                                                }),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 10),
+                                      child: Text(
+                                        'Rest',
+                                        style: new TextStyle(
+                                          fontSize: 9.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          // TextField(
+                          //   autofocus: false,
+                          //   maxLines: 1,
+                          //   style: TextStyle(fontSize: 18),
+                          //   decoration: new InputDecoration(
+                          //     border: InputBorder.none,
+                          //     hintText: "hint",
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Cancel",
+                  style: Theme.of(context).textTheme.caption.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.blue,
+                        fontSize: 15.0,
+                      ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text(
+                  "Save",
+                  style: Theme.of(context).textTheme.caption.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.blue,
+                        fontSize: 15.0,
+                      ),
+                ),
+                onPressed: () async {
+                  final myIcon = _iconController();
+                  final User user = FirebaseAuth.instance.currentUser;
+                  final uid = user.uid;
+                  await db
+                      .collection("dbuser")
+                      .doc(uid)
+                      .collection("heart_rate")
+                      .add(Heart(tanggal, _bpm.toString(), myIcon).toJson());
+
+                  setState(() {
+                    _Saveme = false;
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+      },
+    );
   }
 }
