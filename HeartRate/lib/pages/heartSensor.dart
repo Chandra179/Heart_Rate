@@ -77,79 +77,89 @@ class _HeartSensorState extends State<HeartSensor>
           elevation: 4,
         ),
         backgroundColor: Colors.white,
-        body: ListView(
-          children: <Widget>[
-            ///BPM INDICATOR
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 120, 0, 30),
-              child: RawMaterialButton(
-                onPressed: () {
-                  if (_toggled) {
-                    _untoggle();
-                  } else {
-                    _toggle();
-                  }
-                },
-                elevation: 2.0,
-                fillColor: Colors.white,
-                child: Column(
-                  children: [
-                    Text(
-                      (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "0"),
-                      style:
-                          TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Text('Bpm',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                        ),
-                        Container(
-                          child: Icon(
-                            Icons.favorite,
-                            size: 15,
-                            color: Colors.red,
+        body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [Colors.white, Colors.blue])),
+          child: ListView(
+            children: <Widget>[
+              ///BPM INDICATOR
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 100, 0, 30),
+                child: RawMaterialButton(
+                  onPressed: () {
+                    if (_toggled) {
+                      _untoggle();
+                    } else {
+                      _toggle();
+                    }
+                  },
+                  elevation: 2.0,
+                  fillColor: Colors.white,
+                  child: Column(
+                    children: [
+                      Text(
+                        (_bpm > 30 && _bpm < 150 ? _bpm.toString() : "0"),
+                        style:
+                            TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Text('Bpm',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold)),
                           ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.fromLTRB(70, 70, 70, 70),
-                shape: CircleBorder(
-                  side: BorderSide(color: Colors.blue, width: 8),
-                ),
-              ),
-            ),
-
-            Center(
-              child: Visibility(visible: _StartScan, child: Text('Press to start!')),
-            ),
-
-            ///SHOWING LINE CHART OF SCANNING PROCESS
-            Visibility(
-              visible: _ShowGraph,
-              child: Container(
-                child: SizedBox(
-                  height: 100,
-                  width: 150,
-                  child: Container(
-                    margin: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(18),
-                        ),
-                        color: Colors.white),
-                    child: Chart(_data),
+                          Container(
+                            child: Icon(
+                              Icons.favorite,
+                              size: 15,
+                              color: Colors.red,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.fromLTRB(70, 70, 70, 70),
+                  shape: CircleBorder(
+                    side: BorderSide(color: Colors.blue, width: 8),
                   ),
                 ),
               ),
-            ),
-          ],
+
+              Center(
+                child: Visibility(visible: _StartScan, child: Text('Press to start!')),
+              ),
+              Center(
+                child: Visibility(visible: _toggled, child: Text('Press to stop!')),
+              ),
+
+              ///SHOWING LINE CHART OF SCANNING PROCESS
+              Visibility(
+                visible: _ShowGraph,
+                child: Container(
+                  child: SizedBox(
+                    height: 70,
+                    width: 130,
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(40, 12, 40, 0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50),
+                          ),
+                          color: Colors.white),
+                      child: Chart(_data),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ));
   }
 
