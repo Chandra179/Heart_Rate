@@ -25,6 +25,7 @@ class Auth {
         "umur" : umur,
         "gender" : gender,
         "status" : "pasien",
+        'photoURL' : 'default',
       });
       return user;
     }catch(e){
