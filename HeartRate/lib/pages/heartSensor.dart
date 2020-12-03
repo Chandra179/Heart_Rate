@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:camera/camera.dart';
+import 'package:manual_camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wakelock/wakelock.dart';
@@ -185,6 +185,9 @@ class _HeartSensorState extends State<HeartSensor>
         _ShowGraph = true;
         _bpm = 0;
         _StartScan = false;
+        _myColor = false;
+        _myColor2 = false;
+        _myColor3 = false;
       });
       // after is toggled
       _initTimer();
@@ -226,11 +229,11 @@ class _HeartSensorState extends State<HeartSensor>
   Future<void> _initController() async {
     try {
       List _cameras = await availableCameras();
-      _controller = CameraController(_cameras.first, ResolutionPreset.low);
+      _controller = CameraController(_cameras.first, ResolutionPreset.medium);
       await _controller.initialize();
-      // Future.delayed(Duration(milliseconds: 100)).then((onValue) {
-      //   _controller.flash(true);
-      // });
+      Future.delayed(Duration(milliseconds: 100)).then((onValue) {
+        _controller.flash(true);
+      });
       _controller.startImageStream((CameraImage image) {
         _image = image;
       });
@@ -545,15 +548,6 @@ class _HeartSensorState extends State<HeartSensor>
                             ),
                           ),
                           Divider(),
-                          // TextField(
-                          //   autofocus: false,
-                          //   maxLines: 1,
-                          //   style: TextStyle(fontSize: 18),
-                          //   decoration: new InputDecoration(
-                          //     border: InputBorder.none,
-                          //     hintText: "hint",
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
@@ -585,19 +579,25 @@ class _HeartSensorState extends State<HeartSensor>
                       ),
                 ),
                 onPressed: () async {
-                  final myIcon = _iconController();
-                  final User user = FirebaseAuth.instance.currentUser;
-                  final uid = user.uid;
-                  await db
-                      .collection("dbuser")
-                      .doc(uid)
-                      .collection("heart_rate")
-                      .add(Heart(tanggal, _bpm.toString(), myIcon).toJson());
 
-                  setState(() {
-                    _Saveme = false;
-                  });
-                  Navigator.of(context).pop();
+                  if (_iconController() == 0) {
+                    return '0';
+                  }
+                  else {
+                    final myIcon = _iconController();
+                    final User user = FirebaseAuth.instance.currentUser;
+                    final uid = user.uid;
+                    await db
+                        .collection("dbuser")
+                        .doc(uid)
+                        .collection("heart_rate")
+                        .add(Heart(tanggal, _bpm.toString(), myIcon).toJson());
+
+                    setState(() {
+                      _Saveme = false;
+                    });
+                    Navigator.of(context).pop();
+                  }
                 },
               ),
             ],
