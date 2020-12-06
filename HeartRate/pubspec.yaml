@@ -21,6 +21,7 @@ dependencies:
   wakelock: ^0.1.4+1
   cupertino_icons: ^0.1.2
   camera: ^0.5.8+11
+  manual_camera: ^0.0.2+1
   fluttertoast: ^7.1.1
   rflutter_alert: ^1.1.0
   image_picker: ^0.6.7+14
