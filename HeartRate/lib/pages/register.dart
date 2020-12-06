@@ -39,158 +39,227 @@ class _Register extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Text(
-              "Register",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Container(
-              width: 300,
-              height: 100,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Your Name",
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
+      backgroundColor: Colors.blue,
+      body: Container(
+        margin: const EdgeInsets.only(top: 50),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Text('Daftar Akun', style: TextStyle(fontSize: 32, color: Colors.white)),
+                Container(
+                  margin: const EdgeInsets.only(top: 30),
+                  width: 300,
+                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget> [
+                        Text('Nama', style: TextStyle(color: Colors.white, fontSize: 15),), 
+                      TextField(
+                        maxLength: 15,
+                      decoration: InputDecoration(
+                        hintText: "Your Name",
+                        hintStyle: TextStyle(color: Colors.grey[400]),
+                        fillColor: Colors.white,
+                        filled: true,
+                        counter: Offstage(),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.account_circle_outlined,
+                          color: Colors.blue[800],
+                          size: 30,
+                          )
+                      ),
+                      controller: nameController,
                     ),
+                  ]
                   ),
-                  prefixIcon: Icon(
-                    Icons.person,
-                    )
                 ),
-                controller: nameController,
-              ),
-            ),
-            Container(
-              width: 300,
-              height: 100,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Your Email",
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
+                Container(
+                  width: 300,
+                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget> [
+                        Text('Email', style: TextStyle(color: Colors.white, fontSize: 15),), 
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: "Your Email",
+                        hintStyle: TextStyle(color: Colors.grey[400]),
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.email_outlined,
+                          color: Colors.blue[800],
+                          size: 30,
+                          )
+                      ),
+                      controller: emailController,
                     ),
+                    ]
                   ),
-                  prefixIcon: Icon(
-                    Icons.person,
-                    )
                 ),
-                controller: emailController,
-              ),
-            ),
-            Container(
-              width: 300,
-              height: 100,
-              child: TextField(
-                obscureText: !_passwordVisible,
-                decoration: InputDecoration(
-                  hintText: "Your Password",
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                  ),
-                  prefixIcon: Icon(
-                    Icons.lock
-                    ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _passwordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off,
+                Container(
+                  width: 300,
+                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget> [
+                        Text('Password', style: TextStyle(color: Colors.white, fontSize: 15),), 
+                    TextField(
+                      obscureText: !_passwordVisible,
+                      decoration: InputDecoration(
+                        hintText: "Your Password",
+                        hintStyle: TextStyle(color: Colors.grey[400]),
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.lock_outline,
+                          color: Colors.blue[800],
+                          size: 30,
+                          ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
 
+                          ),
+                          onPressed: () {
+                           
+                              setState((){
+                                _passwordVisible = !_passwordVisible;
+                              });
+                           
+                          },
+                        ),
+                      ),
+                      controller: passwordController,
                     ),
-                    onPressed: () {
-                     
-                        setState((){
-                          _passwordVisible = !_passwordVisible;
-                        });
-                     
-                    },
+                      ]
                   ),
                 ),
-                controller: passwordController,
-              ),
-            ),
-            Container(
-              width: 300,
-              height: 100,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Umur",
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
+                Container(
+                  width: 300,
+                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget> [
+                        Text('Umur', style: TextStyle(color: Colors.white, fontSize: 15),), 
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      maxLength: 2,
+                      decoration: InputDecoration(
+                        hintText: "Umur",
+                        hintStyle: TextStyle(color: Colors.grey[400]),
+                        fillColor: Colors.white,
+                        filled: true,
+                        counter: Offstage(),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.cake_outlined,
+                          color: Colors.blue[800],
+                          size: 30,
+                          )
+                      ),
+                      controller: umurController,
                     ),
+                      ]
                   ),
-                  prefixIcon: Icon(
-                    Icons.toys,
-                    )
                 ),
-                keyboardType: TextInputType.number,
-                controller: umurController,
-              ),
-            ),
-            Container(
-              width: 300,
-              height: 100,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    hintText: "Gender",
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
+                Container(
+                  width: 300,
+                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget> [
+                        Text('Jenis Kelamin', style: TextStyle(color: Colors.white, fontSize: 15),), 
+                    DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          hintText: "Gender",
+                          hintStyle: TextStyle(color: Colors.grey[400]),
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.wc,
+                          color: Colors.blue[800],
+                          size: 30,
+                          )
+                        ),
+                        value: selectedGender,
+                        items: generateItems(genders),
+                        onChanged: (item) {
+                          setState(() {
+                            selectedGender = item;
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                  prefixIcon: Icon(
-                    Icons.wc,
-                    )
-                  ),
-                  value: selectedGender,
-                  items: generateItems(genders),
-                  onChanged: (item) {
-                    setState(() {
-                      selectedGender = item;
-                    });
-                  },
+                      ]
+                  ), 
                 ),
-              ), 
-            ),
-            RaisedButton(
-              child: Text("Register"),
-              onPressed: () async {
-                await Auth.signUp(emailController.text, passwordController.text, nameController.text, umurController.text, selectedGender.type).then((value) {
-                  if(value != null){
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Login()));
-                  }else {
-                     Fluttertoast.showToast(
-                          msg: "Something Wrong",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0
-                      );
-                  }
-                });
-                  
-                
-            }),
-        ],
-        )
+                Container(
+                  width: 300,
+                    height: 50,
+                    margin: const EdgeInsets.only(top: 15),
+                  child: FlatButton(
+                    child: Text("Register",style: TextStyle(color: Colors.blue),),
+                    color: Colors.yellowAccent,
+                    onPressed: () async {
+                      await Auth.signUp(emailController.text, passwordController.text, nameController.text, umurController.text, selectedGender.type).then((value) {
+                        if(value != null){
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Login()));
+                        }else {
+                           Fluttertoast.showToast(
+                                msg: "Something Wrong",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0
+                            );
+                        }
+                      });
+                        
+                      
+                  }),
+                ),
+            ],
+            )
+          ),
+        ),
       ),
     );
   }

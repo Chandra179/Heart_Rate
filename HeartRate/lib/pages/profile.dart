@@ -32,7 +32,7 @@ class _ProfileState extends State<Profile> {
   /// Select an image via gallery or camera
   Future<void> _pickImage(ImageSource source, BuildContext context) async {
     File selected = await ImagePicker.pickImage(source: source);
-    ProgressDialog pr = ProgressDialog(context);
+    ProgressDialog pr = ProgressDialog(context, isDismissible: false);
     pr.style(
       message: 'Upload file...',
       borderRadius: 10.0,
@@ -202,9 +202,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         );
                       } else if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
                       }
-                      return CircularProgressIndicator();
                     },
                   ),
                   StreamBuilder(
@@ -288,7 +286,6 @@ class _ProfileState extends State<Profile> {
     TextEditingController umurController = TextEditingController(text: "");
 
     Gender selectedGender;
-    String genderTemp;
     List<Gender> genders = [Gender("Pria"), Gender("Wanita")];
 
     List<DropdownMenuItem> generateItems(List<Gender> genders) {
@@ -313,16 +310,19 @@ class _ProfileState extends State<Profile> {
                   .doc(firebaseUser.uid)
                   .snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                selectedGender = (snapshot.data['gender'] == 'Pria')?genders[0]:genders[1];
                 if (snapshot.hasData) {
                   return Center(
                     child: Column(
                       children: <Widget>[
                         TextField(
+                          maxLength: 15,
                           controller: namaController
                             ..text = snapshot.data['name'],
                           decoration: InputDecoration(
                             icon: Icon(Icons.person),
                             labelText: "Name",
+                            counter: Offstage(),
                           ),
                         ),
                         TextField(
@@ -341,8 +341,8 @@ class _ProfileState extends State<Profile> {
                             decoration: InputDecoration(
                               icon: Icon(Icons.wc),
                             ),
-                            hint: Text(snapshot.data['gender']),
-                            value: selectedGender,
+                            
+                            value: (snapshot.data['gender'] == 'Pria')?genders[0]:genders[1],
                             items: generateItems(genders),
                             onChanged: (item) {
                               selectedGender = item;
