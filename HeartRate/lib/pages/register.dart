@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:heart_rate/pages/auth.dart';
 import 'package:heart_rate/pages/login.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,7 +42,7 @@ class _Register extends State<Register> {
     return Scaffold(
       backgroundColor: Colors.blue,
       body: Container(
-        margin: const EdgeInsets.only(top: 50),
+        margin: const EdgeInsets.only(top: 50, bottom: 30),
         child: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -62,7 +63,7 @@ class _Register extends State<Register> {
                         hintStyle: TextStyle(color: Colors.grey[400]),
                         fillColor: Colors.white,
                         filled: true,
-                        counter: Offstage(),
+                        
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.all(
@@ -230,13 +231,13 @@ class _Register extends State<Register> {
                 Container(
                   width: 300,
                     height: 50,
-                    margin: const EdgeInsets.only(top: 15),
+                    margin: const EdgeInsets.only(top: 15, bottom: 70),
                   child: FlatButton(
                     child: Text("Register",style: TextStyle(color: Colors.blue),),
                     color: Colors.yellowAccent,
                     onPressed: () async {
                       await Auth.signUp(emailController.text, passwordController.text, nameController.text, umurController.text, selectedGender.type).then((value) {
-                        if(value != null){
+                        if(value != null && nameController.text.length <= 15){
                           Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Login()));

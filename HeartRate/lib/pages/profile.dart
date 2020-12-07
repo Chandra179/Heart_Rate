@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -202,7 +203,9 @@ class _ProfileState extends State<Profile> {
                           ),
                         );
                       } else if (!snapshot.hasData) {
+                        return Text('');
                       }
+                      return Text('');
                     },
                   ),
                   StreamBuilder(
@@ -215,7 +218,7 @@ class _ProfileState extends State<Profile> {
                       if (snapshot.hasData) {
                         return Flexible(
                           child: SizedBox(
-                            width: 180,
+                            width: 190,
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: 1,
@@ -237,7 +240,7 @@ class _ProfileState extends State<Profile> {
                                       Text(snapshot.data['gender'] + "    ",
                                           style: TextStyle(fontSize: 15.0)),
                                       Icon(
-                                        Icons.verified_user,
+                                        Icons.cake_outlined,
                                         size: 15,
                                         color: Colors.lightBlue,
                                       ),
@@ -272,8 +275,7 @@ class _ProfileState extends State<Profile> {
                   endIndent: 20,
                 ),
                 buildListTile(Icons.contact_support, 'FAQ', context),
-                buildListTile(Icons.settings, 'Setting', context),
-                buildListTile(Icons.monetization_on, 'Donate Please', context),
+                buildListTile(Icons.people_alt_outlined, 'About Us', context),
                 buildListTile(Icons.logout, 'Logout', context),
               ])),
         ])));
@@ -315,7 +317,7 @@ class _ProfileState extends State<Profile> {
                   return Center(
                     child: Column(
                       children: <Widget>[
-                        TextField(
+                        TextFormField(
                           maxLength: 15,
                           controller: namaController
                             ..text = snapshot.data['name'],
@@ -331,7 +333,7 @@ class _ProfileState extends State<Profile> {
                           controller: umurController
                             ..text = snapshot.data['umur'],
                           decoration: InputDecoration(
-                            icon: Icon(Icons.toys),
+                            icon: Icon(Icons.cake_outlined),
                             counter: Offstage(),
                             labelText: "Umur",
                           ),
@@ -367,7 +369,18 @@ class _ProfileState extends State<Profile> {
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             onPressed: () {
-              FirebaseFirestore.instance
+              if(namaController.text.length > 15) {
+                Fluttertoast.showToast(
+                                    msg: "Nama Max 15 Character",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
+              }else {
+                FirebaseFirestore.instance
                   .collection("users")
                   .doc(firebaseUser.uid)
                   .update({
@@ -377,6 +390,8 @@ class _ProfileState extends State<Profile> {
               }).then((value) {
                 Navigator.pop(context);
               }).catchError((error) => print("Failed to update user: $error"));
+              }
+              
             },
           )
         ]).show();
@@ -415,7 +430,7 @@ ListTile buildListTile(leadingIcon, titleText, context) {
       },
     );
   }
-  if (titleText == "Setting") {
+  if (titleText == "About Us") {
     return ListTile(
       leading: Icon(leadingIcon),
       title: Text(titleText),
@@ -429,21 +444,7 @@ ListTile buildListTile(leadingIcon, titleText, context) {
       },
     );
   }
-  if (titleText == "Donate Please") {
-    return ListTile(
-      leading: Icon(leadingIcon),
-      title: Text(titleText),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login(),
-          ),
-        );
-      },
-    );
-  }
-
+ 
   if (titleText == "Logout") {
     return ListTile(
       leading: Icon(
