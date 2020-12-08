@@ -231,7 +231,7 @@ class _HeartSensorState extends State<HeartSensor>
       List _cameras = await availableCameras();
       _controller = CameraController(_cameras.first, ResolutionPreset.medium);
       await _controller.initialize();
-      Future.delayed(Duration(milliseconds: 100)).then((onValue) {
+      Future.delayed(Duration(milliseconds: 200)).then((onValue) {
         _controller.flash(true);
       });
       _controller.startImageStream((CameraImage image) {
@@ -244,7 +244,7 @@ class _HeartSensorState extends State<HeartSensor>
 
   ///HEART SCANNING TIMER
   void _initTimer() {
-    _timer = Timer.periodic(Duration(milliseconds: 500 ~/ _fs), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 600 ~/ _fs), (timer) {
       if (_toggled) {
         if (_image != null) _scanImage(_image);
       } else {
@@ -311,7 +311,7 @@ class _HeartSensorState extends State<HeartSensor>
       }
       await Future.delayed(Duration(
           milliseconds:
-              500 * _windowLen ~/ _fs)); // wait for a new set of _data values
+              300 * _windowLen ~/ _fs)); // wait for a new set of _data values
     }
   }
 
@@ -605,5 +605,4 @@ class _HeartSensorState extends State<HeartSensor>
         });
       },
     );
-  }
-}
+  }}
