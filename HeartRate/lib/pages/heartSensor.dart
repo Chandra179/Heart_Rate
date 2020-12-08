@@ -36,6 +36,7 @@ class _HeartSensorState extends State<HeartSensor>
   DateTime _now; // store the now Datetime
   Timer _timer; // timer for image processing
   bool _ShowGraph = false;
+  var _firstPress = true ;
 
   bool _Saveme = false; //Save data to dbase
   bool _StartScan = true;
@@ -580,23 +581,29 @@ class _HeartSensorState extends State<HeartSensor>
                 ),
                 onPressed: () async {
 
-                  if (_iconController() == 0) {
-                    return '0';
+                  if (_firstPress) {
+                    _firstPress = false;
+                    if (_iconController() == 0) {
+                      return '0';
+                    }
+                    else {
+                      final myIcon = _iconController();
+                      final User user = FirebaseAuth.instance.currentUser;
+                      final uid = user.uid;
+                      await db
+                          .collection("dbuser")
+                          .doc(uid)
+                          .collection("heart_rate")
+                          .add(Heart(tanggal, _bpm.toString(), myIcon).toJson());
+
+                      setState(() {
+                        _Saveme = false;
+                      });
+                      Navigator.of(context).pop();
+                    }
                   }
                   else {
-                    final myIcon = _iconController();
-                    final User user = FirebaseAuth.instance.currentUser;
-                    final uid = user.uid;
-                    await db
-                        .collection("dbuser")
-                        .doc(uid)
-                        .collection("heart_rate")
-                        .add(Heart(tanggal, _bpm.toString(), myIcon).toJson());
-
-                    setState(() {
-                      _Saveme = false;
-                    });
-                    Navigator.of(context).pop();
+                    return '0';
                   }
                 },
               ),

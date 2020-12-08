@@ -26,6 +26,7 @@ dependencies:
   rflutter_alert: ^1.1.0
   image_picker: ^0.6.7+14
   progress_dialog: ^1.2.4
+  url_launcher: ^5.7.10
 
   firebase_core: "0.5.2+1"
   cloud_firestore: "^0.14.1+3"
