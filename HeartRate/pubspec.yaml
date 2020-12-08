@@ -25,7 +25,6 @@ dependencies:
   fluttertoast: ^7.1.1
   rflutter_alert: ^1.1.0
   image_picker: ^0.6.7+14
-  future_progress_dialog: ^0.1.1
   progress_dialog: ^1.2.4
 
   firebase_core: "0.5.2+1"
@@ -44,3 +43,4 @@ flutter:
     - assets/images/zoro.jpg
     - assets/images/splash.png
     - assets/images/scan_tutor.jpg
+    - assets/images/logo.png

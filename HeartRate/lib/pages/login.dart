@@ -38,110 +38,151 @@ class _Login extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Text(
-              "LOGIN",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Container(
-              width: 300,
-              height: 100,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Your Email",
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
+      backgroundColor: Colors.blue,
+      body:SingleChildScrollView(
+        child: Container(
+          child: Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 70),
+                child: Column(
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage("assets/images/logo.png"),
+                      width: 200,
+                      height: 70,
                     ),
-                  ),
-                  prefixIcon: Icon(
-                    Icons.person,
-                    )
-                ),
-                controller: emailController,
-              ),
-            ),
-            Container(
-              width: 300,
-              height: 100,
-              child: TextField(
-                obscureText: !_passwordVisible,
-                decoration: InputDecoration(
-                  hintText: "Your Password",
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
+                    Container(
+                      width: 300,
+                      height: 100,
+                      margin: const EdgeInsets.only(top:40),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget> [
+                        Text('Emails', style: TextStyle(color: Colors.white, fontSize: 15),), 
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: "Your Email",
+                            hintStyle: TextStyle(color: Colors.grey[400]),
+                            fillColor: Colors.white,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8.0),
+                              ),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.account_circle_outlined,
+                              color: Colors.blue[800],
+                              size: 30,
+                              )
+                          ),
+                          controller: emailController,
+                        ),
+                        ]
+                      ),
                     ),
-                  ),
-                  prefixIcon: Icon(
-                    Icons.lock
-                    ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _passwordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off,
+                    Container(
+                      width: 300,
+                      height: 100,
+                      margin: const EdgeInsets.only(bottom:30),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget> [ 
+                        Text('Password', style: TextStyle(color: Colors.white, fontSize: 15),), 
+                        TextField(
+                          obscureText: !_passwordVisible,
+                          decoration: InputDecoration(
+                            hintText: "Your Password",
+                            hintStyle: TextStyle(color: Colors.grey[400]),
+                            fillColor: Colors.white,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8.0),
+                              ),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.lock_outline,
+                              color: Colors.blue[800],
+                              size: 30,
+                              ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
 
+                              ),
+                              onPressed: () {
+                                  setState((){
+                                    _passwordVisible = !_passwordVisible;
+                                  });
+                               
+                              },
+                            ),
+                          ),
+                          controller: passwordController,
+                        ),
+                        ]
+                      ),
                     ),
-                    onPressed: () {
-                        setState((){
-                          _passwordVisible = !_passwordVisible;
-                        });
-                     
-                    },
-                  ),
-                ),
-                controller: passwordController,
-              ),
-            ),
-            RaisedButton(
-              child: Text("Log in"),
-              onPressed: () async {
-                await Auth.signIn(emailController.text, passwordController.text).then((user) {
-                  if(user != null){
-                    Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Menu()));
-                  }else {
-                    Fluttertoast.showToast(
-                          msg: "Wrong Email or Password",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0
-                      );
-                  }
-                  
-                });
-            }),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "Don't have an Account? ",
-                ),
-                GestureDetector(
-                  onTap: () {
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Register()),
-                );
-                  },
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    Container(
+                      width: 300,
+                      height: 50,
+                      child: FlatButton(
+                        child: Text("MASUK", style: TextStyle(color: Colors.blue),),
+                        color: Colors.yellowAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide.none
+                        ),
+                        onPressed: () async {
+                          await Auth.signIn(emailController.text, passwordController.text).then((user) {
+                            if(user != null){
+                              Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => Menu()));
+                            }else {
+                              Fluttertoast.showToast(
+                                    msg: "Wrong Email or Password",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
+                            }
+                            
+                          });
+                      }),
                     ),
+                    Container(
+                      width: 300,
+                      height: 50,
+                      margin: const EdgeInsets.only(top: 15),
+                      child: FlatButton(
+                        child: Text("DAFTAR AKUN BARU", style: TextStyle(color: Colors.yellowAccent),),
+                        color: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(color: Colors.yellowAccent, width: 2)
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Register()),
+                        );
+                        },
+                      ),
+                    ),
+                ],
                 ),
-              ],
-            )
-        ],
-        )
+              )
+          ),
+        ),
       ),
     );
   }

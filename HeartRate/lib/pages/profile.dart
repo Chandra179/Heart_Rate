@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -32,7 +33,7 @@ class _ProfileState extends State<Profile> {
   /// Select an image via gallery or camera
   Future<void> _pickImage(ImageSource source, BuildContext context) async {
     File selected = await ImagePicker.pickImage(source: source);
-    ProgressDialog pr = ProgressDialog(context);
+    ProgressDialog pr = ProgressDialog(context, isDismissible: false);
     pr.style(
       message: 'Upload file...',
       borderRadius: 10.0,
@@ -202,9 +203,9 @@ class _ProfileState extends State<Profile> {
                           ),
                         );
                       } else if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
+                        return Text('');
                       }
-                      return CircularProgressIndicator();
+                      return Text('');
                     },
                   ),
                   StreamBuilder(
@@ -217,7 +218,7 @@ class _ProfileState extends State<Profile> {
                       if (snapshot.hasData) {
                         return Flexible(
                           child: SizedBox(
-                            width: 180,
+                            width: 190,
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: 1,
@@ -239,7 +240,7 @@ class _ProfileState extends State<Profile> {
                                       Text(snapshot.data['gender'] + "    ",
                                           style: TextStyle(fontSize: 15.0)),
                                       Icon(
-                                        Icons.verified_user,
+                                        Icons.cake_outlined,
                                         size: 15,
                                         color: Colors.lightBlue,
                                       ),
@@ -274,8 +275,7 @@ class _ProfileState extends State<Profile> {
                   endIndent: 20,
                 ),
                 buildListTile(Icons.contact_support, 'FAQ', context),
-                buildListTile(Icons.settings, 'Setting', context),
-                buildListTile(Icons.monetization_on, 'Donate Please', context),
+                buildListTile(Icons.people_alt_outlined, 'About Us', context),
                 buildListTile(Icons.logout, 'Logout', context),
               ])),
         ])));
@@ -288,7 +288,6 @@ class _ProfileState extends State<Profile> {
     TextEditingController umurController = TextEditingController(text: "");
 
     Gender selectedGender;
-    String genderTemp;
     List<Gender> genders = [Gender("Pria"), Gender("Wanita")];
 
     List<DropdownMenuItem> generateItems(List<Gender> genders) {
@@ -313,16 +312,19 @@ class _ProfileState extends State<Profile> {
                   .doc(firebaseUser.uid)
                   .snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                selectedGender = (snapshot.data['gender'] == 'Pria')?genders[0]:genders[1];
                 if (snapshot.hasData) {
                   return Center(
                     child: Column(
                       children: <Widget>[
-                        TextField(
+                        TextFormField(
+                          maxLength: 15,
                           controller: namaController
                             ..text = snapshot.data['name'],
                           decoration: InputDecoration(
                             icon: Icon(Icons.person),
                             labelText: "Name",
+                            counter: Offstage(),
                           ),
                         ),
                         TextField(
@@ -331,7 +333,7 @@ class _ProfileState extends State<Profile> {
                           controller: umurController
                             ..text = snapshot.data['umur'],
                           decoration: InputDecoration(
-                            icon: Icon(Icons.toys),
+                            icon: Icon(Icons.cake_outlined),
                             counter: Offstage(),
                             labelText: "Umur",
                           ),
@@ -341,8 +343,8 @@ class _ProfileState extends State<Profile> {
                             decoration: InputDecoration(
                               icon: Icon(Icons.wc),
                             ),
-                            hint: Text(snapshot.data['gender']),
-                            value: selectedGender,
+                            
+                            value: (snapshot.data['gender'] == 'Pria')?genders[0]:genders[1],
                             items: generateItems(genders),
                             onChanged: (item) {
                               selectedGender = item;
@@ -367,7 +369,18 @@ class _ProfileState extends State<Profile> {
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             onPressed: () {
-              FirebaseFirestore.instance
+              if(namaController.text.length > 15) {
+                Fluttertoast.showToast(
+                                    msg: "Nama Max 15 Character",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
+              }else {
+                FirebaseFirestore.instance
                   .collection("users")
                   .doc(firebaseUser.uid)
                   .update({
@@ -377,6 +390,8 @@ class _ProfileState extends State<Profile> {
               }).then((value) {
                 Navigator.pop(context);
               }).catchError((error) => print("Failed to update user: $error"));
+              }
+              
             },
           )
         ]).show();
@@ -415,7 +430,7 @@ ListTile buildListTile(leadingIcon, titleText, context) {
       },
     );
   }
-  if (titleText == "Setting") {
+  if (titleText == "About Us") {
     return ListTile(
       leading: Icon(leadingIcon),
       title: Text(titleText),
@@ -429,21 +444,7 @@ ListTile buildListTile(leadingIcon, titleText, context) {
       },
     );
   }
-  if (titleText == "Donate Please") {
-    return ListTile(
-      leading: Icon(leadingIcon),
-      title: Text(titleText),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login(),
-          ),
-        );
-      },
-    );
-  }
-
+ 
   if (titleText == "Logout") {
     return ListTile(
       leading: Icon(
