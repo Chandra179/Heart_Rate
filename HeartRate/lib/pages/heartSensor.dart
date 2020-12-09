@@ -583,7 +583,7 @@ class _HeartSensorState extends State<HeartSensor>
 
                   if (_firstPress) {
                     _firstPress = false;
-                    if (_iconController() == 0) {
+                    if (_iconController() == 0 || _bpm == 0) {
                       return '0';
                     }
                     else {
