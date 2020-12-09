@@ -36,6 +36,7 @@ class _HeartSensorState extends State<HeartSensor>
   DateTime _now; // store the now Datetime
   Timer _timer; // timer for image processing
   bool _ShowGraph = false;
+  var _firstPress = true ;
 
   bool _Saveme = false; //Save data to dbase
   bool _StartScan = true;
@@ -231,7 +232,7 @@ class _HeartSensorState extends State<HeartSensor>
       List _cameras = await availableCameras();
       _controller = CameraController(_cameras.first, ResolutionPreset.medium);
       await _controller.initialize();
-      Future.delayed(Duration(milliseconds: 100)).then((onValue) {
+      Future.delayed(Duration(milliseconds: 200)).then((onValue) {
         _controller.flash(true);
       });
       _controller.startImageStream((CameraImage image) {
@@ -244,7 +245,7 @@ class _HeartSensorState extends State<HeartSensor>
 
   ///HEART SCANNING TIMER
   void _initTimer() {
-    _timer = Timer.periodic(Duration(milliseconds: 500 ~/ _fs), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 600 ~/ _fs), (timer) {
       if (_toggled) {
         if (_image != null) _scanImage(_image);
       } else {
@@ -311,7 +312,7 @@ class _HeartSensorState extends State<HeartSensor>
       }
       await Future.delayed(Duration(
           milliseconds:
-              500 * _windowLen ~/ _fs)); // wait for a new set of _data values
+              300 * _windowLen ~/ _fs)); // wait for a new set of _data values
     }
   }
 
@@ -580,23 +581,29 @@ class _HeartSensorState extends State<HeartSensor>
                 ),
                 onPressed: () async {
 
-                  if (_iconController() == 0) {
-                    return '0';
+                  if (_firstPress) {
+                    _firstPress = false;
+                    if (_iconController() == 0 || _bpm == 0) {
+                      return '0';
+                    }
+                    else {
+                      final myIcon = _iconController();
+                      final User user = FirebaseAuth.instance.currentUser;
+                      final uid = user.uid;
+                      await db
+                          .collection("dbuser")
+                          .doc(uid)
+                          .collection("heart_rate")
+                          .add(Heart(tanggal, _bpm.toString(), myIcon).toJson());
+
+                      setState(() {
+                        _Saveme = false;
+                      });
+                      Navigator.of(context).pop();
+                    }
                   }
                   else {
-                    final myIcon = _iconController();
-                    final User user = FirebaseAuth.instance.currentUser;
-                    final uid = user.uid;
-                    await db
-                        .collection("dbuser")
-                        .doc(uid)
-                        .collection("heart_rate")
-                        .add(Heart(tanggal, _bpm.toString(), myIcon).toJson());
-
-                    setState(() {
-                      _Saveme = false;
-                    });
-                    Navigator.of(context).pop();
+                    return '0';
                   }
                 },
               ),
@@ -605,5 +612,4 @@ class _HeartSensorState extends State<HeartSensor>
         });
       },
     );
-  }
-}
+  }}

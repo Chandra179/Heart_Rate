@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//FIREBASE
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +11,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  ///INISIALISASI DATABASE
   @override
   void initState() {
     super.initState();
@@ -21,12 +22,14 @@ class _HomeState extends State<Home> {
     });
   }
 
+  ///HALAMAN HOME
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('History'),
       ),
+      /// STREAMBUILDER UNTUK MEMBUAT LIST
       body: StreamBuilder(
           stream: getUsersInformationStreamSnapshots(context),
           builder: (context, snapshot) {
@@ -43,6 +46,7 @@ class _HomeState extends State<Home> {
   }
 }
 
+///RETRIEVE INFORMASI USER DARI FIRESTORE
 Stream<QuerySnapshot> getUsersInformationStreamSnapshots(
     BuildContext context) async* {
   final User user = FirebaseAuth.instance.currentUser;
@@ -56,6 +60,7 @@ Stream<QuerySnapshot> getUsersInformationStreamSnapshots(
       .snapshots();
 }
 
+///WIDGET UNTUK MENAMPILKAN CARD
 Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
   return Card(
     elevation: 2,
@@ -99,7 +104,6 @@ Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
               ),
               new Text(heartdata['bpm'].toString()),
             ],
-
             ///RETRIEVE DATA
           ),
           subtitle: Row(
@@ -107,7 +111,6 @@ Widget buildUserCard(BuildContext context, DocumentSnapshot heartdata) {
             children: <Widget>[
               Text(
                 heartdata['tanggal'].toString(),
-
                 ///RETRIEVE DATA
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),

@@ -8,7 +8,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:heart_rate/pages/login.dart';
@@ -421,13 +421,13 @@ ListTile buildListTile(leadingIcon, titleText, context) {
     return ListTile(
       leading: Icon(leadingIcon),
       title: Text(titleText),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login(),
-          ),
-        );
+      onTap: () async {
+        const url = 'https://zicare.id';
+        if (await canLaunch(url)) {
+          await launch(url);
+        } else {
+          throw 'Could not launch $url';
+        }
       },
     );
   }
