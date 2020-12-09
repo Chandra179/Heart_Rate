@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:heart_rate/pages/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:heart_rate/pages/faq.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,7 +22,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   var firebaseUser;
   File _imageFile;
-  
 
   @override
   void initState() {
@@ -35,17 +35,16 @@ class _ProfileState extends State<Profile> {
     File selected = await ImagePicker.pickImage(source: source);
     ProgressDialog pr = ProgressDialog(context, isDismissible: false);
     pr.style(
-      message: 'Upload file...',
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      progressWidget: CircularProgressIndicator(),
-      elevation: 10.0,
-      insetAnimCurve: Curves.easeInOut,
-      progressTextStyle: TextStyle(
-        color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-      messageTextStyle: TextStyle(
-        color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600)
-      );
+        message: 'Upload file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: CircularProgressIndicator(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
     // firebase_storage.Reference ref =
     // firebase_storage.FirebaseStorage.instance.ref('images/${DateTime.now()}.png').putFile(_imageFile);
     String filePath = 'images/${DateTime.now()}.png';
@@ -72,7 +71,6 @@ class _ProfileState extends State<Profile> {
     try {
       await task;
       print('Upload complete.');
-      
     } catch (e) {
       if (e.code == 'permission-denied') {
         print('User does not have permission to upload to this reference.');
@@ -88,9 +86,10 @@ class _ProfileState extends State<Profile> {
         .collection("users")
         .doc(firebaseUser.uid)
         .update({'photoURL': downloadURL}).then((value) {
-                Navigator.pop(context);
-                pr.hide();
-              }).catchError((error) => print("Failed to update user: $error"));;
+      Navigator.pop(context);
+      pr.hide();
+    }).catchError((error) => print("Failed to update user: $error"));
+    ;
 
     setState(() {
       _imageFile = selected;
@@ -138,7 +137,10 @@ class _ProfileState extends State<Profile> {
                       if (snapshot.hasData) {
                         return CircleAvatar(
                           radius: 50,
-                          backgroundImage: (snapshot.data['photoURL'] != 'default')?NetworkImage(snapshot.data['photoURL']):AssetImage("assets/images/zoro.jpg"),
+                          backgroundImage:
+                              (snapshot.data['photoURL'] != 'default')
+                                  ? NetworkImage(snapshot.data['photoURL'])
+                                  : AssetImage("assets/images/zoro.jpg"),
                           child: ClipOval(
                             child: Stack(
                               children: <Widget>[
@@ -312,7 +314,9 @@ class _ProfileState extends State<Profile> {
                   .doc(firebaseUser.uid)
                   .snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                selectedGender = (snapshot.data['gender'] == 'Pria')?genders[0]:genders[1];
+                selectedGender = (snapshot.data['gender'] == 'Pria')
+                    ? genders[0]
+                    : genders[1];
                 if (snapshot.hasData) {
                   return Center(
                     child: Column(
@@ -343,8 +347,9 @@ class _ProfileState extends State<Profile> {
                             decoration: InputDecoration(
                               icon: Icon(Icons.wc),
                             ),
-                            
-                            value: (snapshot.data['gender'] == 'Pria')?genders[0]:genders[1],
+                            value: (snapshot.data['gender'] == 'Pria')
+                                ? genders[0]
+                                : genders[1],
                             items: generateItems(genders),
                             onChanged: (item) {
                               selectedGender = item;
@@ -369,51 +374,33 @@ class _ProfileState extends State<Profile> {
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             onPressed: () {
-              if(namaController.text.length > 15) {
+              if (namaController.text.length > 15) {
                 Fluttertoast.showToast(
-                                    msg: "Nama Max 15 Character",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0
-                                );
-              }else {
+                    msg: "Nama Max 15 Character",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              } else {
                 FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(firebaseUser.uid)
-                  .update({
-                'name': namaController.text,
-                'umur': umurController.text,
-                'gender': selectedGender.type
-              }).then((value) {
-                Navigator.pop(context);
-              }).catchError((error) => print("Failed to update user: $error"));
+                    .collection("users")
+                    .doc(firebaseUser.uid)
+                    .update({
+                  'name': namaController.text,
+                  'umur': umurController.text,
+                  'gender': selectedGender.type
+                }).then((value) {
+                  Navigator.pop(context);
+                }).catchError(
+                        (error) => print("Failed to update user: $error"));
               }
-              
             },
           )
         ]).show();
   }
 }
-
-// Stream<QuerySnapshot> getUserInfo(BuildContext context)  {
-//   final User user =  FirebaseAuth.instance.currentUser;
-//   final uid = user.uid;
-
-//   return FirebaseFirestore.instance
-//       .collection('users')
-//       .doc(uid)
-//       .snapshots();
-// }
-
-//firebase data
-// Stream<QuerySnapshot> getUserInfo() async*{
-//   var firebaseUser = FirebaseAuth.instance.currentUser;
-//   yield* FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).snapshots();
-
-// }
 
 ListTile buildListTile(leadingIcon, titleText, context) {
   if (titleText == "FAQ") {
@@ -424,7 +411,7 @@ ListTile buildListTile(leadingIcon, titleText, context) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Login(),
+            builder: (context) => Faq(),
           ),
         );
       },
@@ -444,7 +431,7 @@ ListTile buildListTile(leadingIcon, titleText, context) {
       },
     );
   }
- 
+
   if (titleText == "Logout") {
     return ListTile(
       leading: Icon(
@@ -470,17 +457,3 @@ class Gender {
   Gender(this.type);
 }
 
-// Stream getUserInformationStreamSnapshots(
-//     BuildContext context) async* {
-//   final User user = FirebaseAuth.instance.currentUser;
-//   final uid = user.uid;
-
-//    yield* FirebaseFirestore.instance
-//       .collection('users')
-//       .doc(uid)
-//       .snapshots();
-// }
-
-// Widget buildUserProfile(BuildContext context, DocumentSnapshot profileData){
-
-// }
